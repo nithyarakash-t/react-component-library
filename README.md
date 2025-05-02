@@ -1,4 +1,2 @@
 # Description
-A template with reusable CSS resets, sample color schemes, typography, easings, scrollbars and icon files and more.
-
-Built on React for illustration purposes.
+A user focused storybook based react UI component library compliant with WCAG accessibility standards and full support for keyboard and mobile users
