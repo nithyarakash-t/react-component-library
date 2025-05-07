@@ -1,25 +1,24 @@
-import { useState, createContext, useContext, ReactNode, Children, cloneElement, ReactElement } from 'react';
+import { useState, createContext, useContext, ReactNode, useRef } from 'react';
 import './Accordion.scss';
 
 /***Accordion***/
 interface AccordionContextType {
-    accordionId:string
+    accordionId: string;
 }
+
 const AccordionContext = createContext<AccordionContextType | undefined>(undefined);
+
 export interface AccordionProps {
-    accordionId:string;
+    accordionId: string;
     customClass?: string;
     children?: ReactNode;
 }
-export function Accordion({ accordionId,customClass, children, ...props }: AccordionProps) {
-    return (
-        <AccordionContext.Provider value={{accordionId}}>
-            <div className={'c-accordion__wrap' + ' ' + customClass} id={accordionId} {...props}>
-                {Children.map(children, (child)=>{
-                    return cloneElement(child as ReactElement, {'data-testparentid': accordionId})
-                })}
 
-                {/* {children} */}
+export function Accordion({ accordionId, customClass, children }: AccordionProps) {
+    return (
+        <AccordionContext.Provider value={{ accordionId }}>
+            <div className={`c-accordion__wrap ${customClass || ''}`} id={accordionId}>
+                {children}
             </div>
         </AccordionContext.Provider>
     );
@@ -30,29 +29,34 @@ interface CollapseContextType {
     collapseId: string;
     isOpen: boolean;
     toggleCollapse: () => void;
+    // Add a nesting level indicator
+    nestingLevel: number;
 }
+
 const CollapseContext = createContext<CollapseContextType | undefined>(undefined);
+
 export interface CollapseProps {
     customClass?: string;
     collapseId: string;
     open?: boolean;
     children: ReactNode;
-    // parentId?:string | null;
 }
-export function Collapse({ customClass, collapseId, open = false, children, ...props }: CollapseProps) {
+
+export function Collapse({ customClass, collapseId, open = false, children }: CollapseProps) {
     const [isOpen, setIsOpen] = useState(open);
     const accordionContext = useContext(AccordionContext);
-    const parentId = accordionContext?.accordionId || null;
+    const parentCollapseContext = useContext(CollapseContext);
     const toggleCollapse = () => setIsOpen(!isOpen);
-
-    // //For storybook
-    // useEffect(()=>{
-    //     setIsOpen(open);
-    // },[open])
+    
+    // Calculate nesting level based on parent context
+    const nestingLevel = parentCollapseContext ? parentCollapseContext.nestingLevel + 1 : 0;
+    
+    // Only use the accordion's ID if we're at the top level (direct child)
+    const effectiveParentId = nestingLevel === 0 ? accordionContext?.accordionId : undefined;
     
     return (
-        <CollapseContext.Provider value={{ collapseId, isOpen,  toggleCollapse}}>
-            <div className={'c-collapse__wrap' + ' ' + customClass} data-parentid={parentId} {...props}>
+        <CollapseContext.Provider value={{ collapseId, isOpen, toggleCollapse, nestingLevel }}>
+            <div className={`c-collapse__wrap ${customClass || ''}`} data-parentid={effectiveParentId}>
                 {children}
             </div>
         </CollapseContext.Provider>
@@ -62,7 +66,8 @@ export function Collapse({ customClass, collapseId, open = false, children, ...p
 export interface CollapseControlProps {
     children: ReactNode;
 }
-export function CollapseControl({ children, ...props }: CollapseControlProps) {
+
+export function CollapseControl({ children }: CollapseControlProps) {
     const context = useContext(CollapseContext);
     
     if (!context) {
@@ -73,11 +78,10 @@ export function CollapseControl({ children, ...props }: CollapseControlProps) {
     
     return (
         <button type='button' 
-            className={'c-collapse__control'}
+            className='c-collapse__control'
             onClick={toggleCollapse}
             aria-controls={collapseId}
             aria-expanded={isOpen}
-            {...props}
         >
             {children}
         </button>
@@ -87,7 +91,8 @@ export function CollapseControl({ children, ...props }: CollapseControlProps) {
 export interface CollapseContentProps {
     children: ReactNode;
 }
-export function CollapseContent({ children, ...props }: CollapseContentProps) {
+
+export function CollapseContent({ children }: CollapseContentProps) {
     const context = useContext(CollapseContext);
     
     if (!context) {
@@ -97,9 +102,9 @@ export function CollapseContent({ children, ...props }: CollapseContentProps) {
     const { isOpen, collapseId } = context;
     
     return (
-        <div id={collapseId} className='c-collapse__contentouter' data-open={isOpen} {...props}>
+        <div id={collapseId} className='c-collapse__contentouter' data-open={isOpen}>
             <div className='c-collapse__contentinner'>
-                <div className={'c-collapse__content'}>
+                <div className='c-collapse__content'>
                     {children}
                 </div>
             </div>

@@ -14,8 +14,9 @@ const meta: Meta<typeof Collapse> = {
   tags: ['autodocs'],
   argTypes: {
     customClass: { control: 'text' },
-    id: { control: 'text' },
+    collapseId: { control: 'text' },
     open: { control: 'boolean' },
+    // parentId: {control: 'text'}
   },
   // Add subcomponents so they appear in the docs
   subcomponents: { CollapseControl, CollapseContent },
@@ -26,7 +27,7 @@ type Story = StoryObj<typeof Collapse>;
 
 export const Default: Story = {
   args: {
-    id: 'def-collapse',
+    collapseId: 'def-collapse',
     open: false,
     customClass: 'example-collapse'
   },
