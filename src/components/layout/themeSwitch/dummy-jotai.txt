@@ -1,0 +1,91 @@
+// File: src/atom/themeAtom.ts
+import { atom, useAtom } from 'jotai';
+import { useEffect } from 'react';
+
+export type Theme = 'light' | 'dark';
+const STORAGE_KEY = "theme-preference";
+
+// Helper function to get initial theme preference
+function getColorPreference(): Theme {
+  if (typeof window !== 'undefined') {
+    const storedPreference = localStorage.getItem(STORAGE_KEY) as Theme | null;
+    if (storedPreference) {
+      return storedPreference;
+    }
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  return 'light';
+}
+
+// Create the theme atom
+export const themeAtom = atom<Theme>(getColorPreference());
+
+// Hook to use and manage theme
+export function useTheme() {
+  const [theme, setTheme] = useAtom(themeAtom);
+  
+  useEffect(() => {
+    // Update localStorage and document when theme changes
+    localStorage.setItem(STORAGE_KEY, theme);
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+  
+  // Set up listener for system preference changes
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    
+    const handleChange = ({ matches: isDark }: MediaQueryListEvent) => {
+      setTheme(isDark ? 'dark' : 'light');
+    };
+    
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, [setTheme]);
+  
+  return { theme, setTheme };
+}
+
+// File: src/components/layout/themeSwitch/ThemeToggle.tsx
+import { useTheme } from '../../../atom/themeAtom';
+
+export const ThemeToggle: React.FC = () => {
+  const { theme, setTheme } = useTheme();
+  
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
+  
+  return (
+    <button onClick={toggleTheme}>
+      Switch to {theme === 'dark' ? 'light' : 'dark'} mode
+    </button>
+  );
+};
+
+// File: src/components/Example.tsx
+import { useAtom } from 'jotai';
+import { themeAtom } from '../atom/themeAtom';
+
+export const Example: React.FC = () => {
+  const [theme] = useAtom(themeAtom);
+  
+  return (
+    <div className={`component ${theme}`}>
+      Current theme: {theme}
+    </div>
+  );
+};
+
+// File: src/App.tsx
+import { Provider } from 'jotai';
+import YourAppComponents from './YourAppComponents';
+
+function App() {
+  return (
+    <Provider>
+      <YourAppComponents />
+    </Provider>
+  );
+}
+
+export default App;

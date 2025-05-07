@@ -1,0 +1,96 @@
+// File: src/store/themeStore.ts
+import { create } from 'zustand';
+import { useEffect } from 'react';
+
+export type Theme = 'light' | 'dark';
+const STORAGE_KEY = "theme-preference";
+
+// Helper function to get initial theme preference
+function getColorPreference(): Theme {
+  if (typeof window !== 'undefined') {
+    const storedPreference = localStorage.getItem(STORAGE_KEY) as Theme | null;
+    if (storedPreference) {
+      return storedPreference;
+    }
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  return 'light';
+}
+
+// Define store state and actions
+interface ThemeState {
+  theme: Theme;
+  setTheme: (theme: Theme) => void;
+}
+
+// Create the store
+export const useThemeStore = create<ThemeState>((set) => ({
+  theme: getColorPreference(),
+  setTheme: (theme) => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(STORAGE_KEY, theme);
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+    set({ theme });
+  },
+}));
+
+// Hook to initialize theme preference listener
+export function useThemePreferenceListener() {
+  const setTheme = useThemeStore(state => state.setTheme);
+  
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    
+    const handleChange = ({ matches: isDark }: MediaQueryListEvent) => {
+      setTheme(isDark ? 'dark' : 'light');
+    };
+    
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, [setTheme]);
+}
+
+// File: src/components/layout/themeSwitch/ThemeToggle.tsx
+import { useThemeStore } from '../../../store/themeStore';
+
+export const ThemeToggle: React.FC = () => {
+  const theme = useThemeStore(state => state.theme);
+  const setTheme = useThemeStore(state => state.setTheme);
+  
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
+  
+  return (
+    <button onClick={toggleTheme}>
+      Switch to {theme === 'dark' ? 'light' : 'dark'} mode
+    </button>
+  );
+};
+
+// File: src/components/Example.tsx
+import { useThemeStore } from '../store/themeStore';
+
+export const Example: React.FC = () => {
+  const theme = useThemeStore(state => state.theme);
+  
+  return (
+    <div className={`component ${theme}`}>
+      Current theme: {theme}
+    </div>
+  );
+};
+
+// File: src/App.tsx
+import { useThemePreferenceListener } from './store/themeStore';
+import YourAppComponents from './YourAppComponents';
+
+function App() {
+  // Initialize the theme preference listener
+  useThemePreferenceListener();
+  
+  return <YourAppComponents />;
+}
+
+export default App;

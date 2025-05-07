@@ -1,9 +1,11 @@
-import { useState, createContext, useContext, ReactNode, Children, cloneElement, ReactElement } from 'react';
+import { useState, createContext, useContext, ReactNode, Children, cloneElement, ReactElement, isValidElement, useEffect, useRef } from 'react';
 import './Accordion.scss';
 
 /***Accordion***/
 interface AccordionContextType {
-    accordionId:string
+    accordionId:string;
+    activeCollapseId: string | null;
+    setActiveCollapseId: (id: string | null) => void;
 }
 const AccordionContext = createContext<AccordionContextType | undefined>(undefined);
 export interface AccordionProps {
@@ -11,12 +13,17 @@ export interface AccordionProps {
     customClass?: string;
     children?: ReactNode;
 }
-export function Accordion({ accordionId,customClass, children, ...props }: AccordionProps) {
+export function Accordion({ accordionId, customClass, children, ...props }: AccordionProps) {
+    const [activeCollapseId, setActiveCollapseId] = useState<string | null>(null);
+
     return (
-        <AccordionContext.Provider value={{accordionId}}>
+        <AccordionContext.Provider value={{accordionId, activeCollapseId, setActiveCollapseId}}>
             <div className={'c-accordion__wrap' + ' ' + customClass} id={accordionId} {...props}>
                 {Children.map(children, (child)=>{
-                    return cloneElement(child as ReactElement, {'data-testparentid': accordionId})
+                    if (isValidElement(child)) {
+                        return cloneElement(child as ReactElement, {'data-testparentid': accordionId})
+                    }
+                    return child
                 })}
 
                 {/* {children} */}
@@ -37,15 +44,50 @@ export interface CollapseProps {
     collapseId: string;
     open?: boolean;
     children: ReactNode;
-    // parentId?:string | null;
 }
 export function Collapse({ customClass, collapseId, open = false, children, ...props }: CollapseProps) {
-    const [isOpen, setIsOpen] = useState(open);
+    const [localIsOpen, setLocalIsOpen] = useState(open);
     const accordionContext = useContext(AccordionContext);
+    const isInAccordion = !!accordionContext;
     const parentId = accordionContext?.accordionId || null;
-    const toggleCollapse = () => setIsOpen(!isOpen);
 
-    // //For storybook
+    // context ? context : localState
+    const isOpen = isInAccordion 
+        ? accordionContext.activeCollapseId === collapseId 
+        : localIsOpen;
+
+    
+    const toggleCollapse = () => {
+        if (isInAccordion) {
+            const newActiveId = isOpen ? null : collapseId;
+            accordionContext.setActiveCollapseId(newActiveId);
+        } else {
+            setLocalIsOpen(!localIsOpen);
+        }
+    };
+    
+    // one off useRef because esLint asks for dep. in the dep. array
+    const isFirstRender = useRef(true);
+    useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+
+            if (isInAccordion && open && accordionContext.activeCollapseId === null) {
+                accordionContext.setActiveCollapseId(collapseId);
+            } else if (!isInAccordion) {
+                setLocalIsOpen(open);
+            }
+        }
+    }, [accordionContext, collapseId, isInAccordion, open]);
+    
+
+    useEffect(() => { // non accordion collapse / req. because open is used as prop -> state, if its a prop only - we wont require this
+        if (!isInAccordion) {
+            setLocalIsOpen(open);
+        }
+    }, [open, isInAccordion]);
+
+    // //For storybook updates --- above effect already handles this usecase
     // useEffect(()=>{
     //     setIsOpen(open);
     // },[open])

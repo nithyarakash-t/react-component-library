@@ -33,7 +33,7 @@ export const Default: Story = {
   render: (args) => {
     return (
      <Accordion {...args}>
-         <Collapse customClass='acc-child-collapse' collapseId='acc-child-1' open={false}>
+         <Collapse customClass='acc-child-collapse' collapseId='acc-child-1' open={true}>
             <CollapseControl>
                 Collapse 1
             </CollapseControl>
@@ -72,7 +72,7 @@ export const Nested: Story = {
             <CollapseContent>
               <div style={{paddingLeft: '3rem'}}>
                 <Accordion accordionId='nested-accordion-1-1'>
-                  <Collapse customClass='acc-child-collapse-nested' collapseId='acc-nchild-1-1' open={false}>
+                  <Collapse customClass='acc-child-collapse-nested' collapseId='acc-nchild-1-1' open={true}>
                     <CollapseControl>
                         Collapse 1-1
                     </CollapseControl>
@@ -84,7 +84,7 @@ export const Nested: Story = {
               </div>
             </CollapseContent>
         </Collapse>
-        <Collapse customClass='acc-child-collapse' collapseId='acc-nchild-2' open={false}>
+        <Collapse customClass='acc-child-collapse' collapseId='acc-nchild-2' open={true}>
             <CollapseControl>
                 Collapse 2
             </CollapseControl>
