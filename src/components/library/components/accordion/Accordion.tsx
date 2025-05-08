@@ -18,7 +18,7 @@ export function Accordion({ accordionId, customClass, children, ...props }: Acco
 
     return (
         <AccordionContext.Provider value={{accordionId, activeCollapseId, setActiveCollapseId}}>
-            <div className={'c-accordion__wrap' + ' ' + customClass} id={accordionId} {...props}>
+            <div className={`c-accordion__wrap${customClass ? ` ${customClass}` : ''}`} id={accordionId} {...props}>
                 {Children.map(children, (child)=>{
                     if (isValidElement(child)) {
                         return cloneElement(child as ReactElement, {'data-testparentid': accordionId})
@@ -94,7 +94,7 @@ export function Collapse({ customClass, collapseId, open = false, children, ...p
     
     return (
         <CollapseContext.Provider value={{ collapseId, isOpen,  toggleCollapse}}>
-            <div className={'c-collapse__wrap' + ' ' + customClass} data-parentid={parentId} {...props}>
+            <div className={`c-collapse__wrap${customClass ? ` ${customClass}` : ''}`} data-parentid={parentId} {...props}>
                 {children}
             </div>
         </CollapseContext.Provider>

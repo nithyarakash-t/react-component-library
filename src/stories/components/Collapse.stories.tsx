@@ -18,6 +18,9 @@ const meta: Meta<typeof Collapse> = {
     open: { control: 'boolean' },
     // parentId: {control: 'text'}
   },
+  args: {
+    customClass: 'example-collapse'
+  },
   // Add subcomponents so they appear in the docs
   subcomponents: { CollapseControl, CollapseContent },
 };
@@ -29,7 +32,6 @@ export const Default: Story = {
   args: {
     collapseId: 'def-collapse',
     open: false,
-    customClass: 'example-collapse'
   },
 
   render: (args) => {
