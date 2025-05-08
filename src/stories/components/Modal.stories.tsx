@@ -4,9 +4,9 @@ import {
   ModalBody, 
   ModalControl,
   ModalFooter,
-  ModalHeader,
-  ModalContext
+  ModalHeader
 } from '../../components/library/components/modal/Modal';
+import { ModalContext } from '../../components/library/components/modal/ModalContext';
 
 const meta: Meta<typeof Modal> = {
   title: 'Components/Modal',
@@ -62,7 +62,7 @@ export const Default: Story = {
                         </>
                     );
                 }}
-          </ModalContext.Consumer>
+            </ModalContext.Consumer>
         </ModalHeader>
         
         <ModalBody>

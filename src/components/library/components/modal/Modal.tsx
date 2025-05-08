@@ -1,40 +1,33 @@
-import { Children, createContext, isValidElement, ReactNode, useContext, useEffect, useRef, useState } from 'react';
+import { Children, isValidElement, ReactNode, useContext, useEffect, useRef, useState } from 'react';
+import { ModalContext  } from './ModalContext';
 import './Modal.scss';
 
 export interface ModalProps {
-    modalId:string;
-    customClass?:string;
-    position?:'fixed' | 'absolute';
-    role?:'dialog' | 'alertdialog';
-    open?:boolean;
+    modalId: string;
+    customClass?: string;
+    position?: 'fixed' | 'absolute';
+    role?: 'dialog' | 'alertdialog';
+    open?: boolean;
     hasBackdrop?: boolean;
-    children?:ReactNode;
+    children?: ReactNode;
 }
-interface ModalContextType {
-    modalId:string;
-    isOpen:boolean;
-    toggleDialog:()=>void;
-    openDialog:()=>void;
-    closeDialog:()=>void;
-}
-export const ModalContext = createContext<ModalContextType | undefined>(undefined);
 
-export function Modal({modalId, customClass, position='fixed', role='dialog', open=false, hasBackdrop=true, children, ...props}:ModalProps) {
+export function Modal({modalId, customClass, position='fixed', role='dialog', open=false, hasBackdrop=true, children, ...props}: ModalProps) {
     const [isOpen, setIsOpen] = useState(open);
     const dialogRef = useRef<HTMLDialogElement>(null);
 
     // Find specific child components
-    let header =  null, body = null, footer = null;
+    let header = null, body = null, footer = null;
     
     Children.forEach(children, child => {
         if (!isValidElement(child)) return;
         
         if (child.type === ModalHeader) {
-        header = child;
+          header = child;
         } else if (child.type === ModalBody) {
-        body = child;
+          body = child;
         } else if (child.type === ModalFooter) {
-        footer = child;
+          footer = child;
         }
     });
 
