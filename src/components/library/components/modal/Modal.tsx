@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useEffect, useRef, useState } from 'react';
+import { Children, createContext, isValidElement, ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import './Modal.scss';
 
 export interface ModalProps {
@@ -17,11 +17,26 @@ interface ModalContextType {
     openDialog:()=>void;
     closeDialog:()=>void;
 }
-const ModalContext = createContext<ModalContextType | undefined>(undefined);
+export const ModalContext = createContext<ModalContextType | undefined>(undefined);
 
 export function Modal({modalId, customClass, position='fixed', role='dialog', open=false, hasBackdrop=true, children, ...props}:ModalProps) {
     const [isOpen, setIsOpen] = useState(open);
     const dialogRef = useRef<HTMLDialogElement>(null);
+
+    // Find specific child components
+    let header =  null, body = null, footer = null;
+    
+    Children.forEach(children, child => {
+        if (!isValidElement(child)) return;
+        
+        if (child.type === ModalHeader) {
+        header = child;
+        } else if (child.type === ModalBody) {
+        body = child;
+        } else if (child.type === ModalFooter) {
+        footer = child;
+        }
+    });
 
     //dialog ui methods - start
     //useeffect for open/close
@@ -69,27 +84,29 @@ export function Modal({modalId, customClass, position='fixed', role='dialog', op
 
     return(
         <ModalContext.Provider value={{modalId, isOpen, toggleDialog, openDialog, closeDialog}}>
-            {children}
+            {/* Render non - header, body , footer children */}
+            {Children.map(children, child => {
+                if ( !isValidElement(child) || (child.type !== ModalHeader && child.type !== ModalBody && child.type !== ModalFooter) ) {
+                    return child;
+                }
+                return null;
+            })}
             <dialog ref={dialogRef} id={modalId} role={role}  className={`c-modal__wrap${customClass ? ` ${customClass}` : ''}`} data-position={position}
                 data-hasbackdrop={hasBackdrop}
                 aria-labelledby={modalId + '-title'} {...props}>
                 <div className='c-modal__container'>
-                    <div className='c-modal__header'>
-                        <button type='button' className='c-modal__header-close' aria-label='Close' onClick={closeDialog}>Close</button>
-                        <h2 className='c-modal__header-title' id={modalId + '-title'}>Dialog title</h2>
-                    </div>
-                    <div className='c-modal__body'>
-                        Sample content
-                    </div>
-                    <div className='c-modal__footer'>
-                        Sample footer
-                    </div>
+                    {header}
+                    
+                    {body}
+
+                    {footer}
                 </div>
             </dialog>
         </ModalContext.Provider>
     )
 }
 
+//Control
 export function ModalControl() {
     const modalContext = useContext(ModalContext);
     if (!modalContext) {
@@ -102,26 +119,25 @@ export function ModalControl() {
     )
 }
 
+// Header, body and footer
 export function ModalHeader({ children }: { children: ReactNode }) {    
     return (
       <div className='c-modal__header'>
         {children || 'Sample Header'}
       </div>
     );
-  }
-  
-  export function ModalBody({ children }: { children: ReactNode }) {
+}
+export function ModalBody({ children }: { children: ReactNode }) {
     return (
-      <div className='c-modal__body'>
+        <div className='c-modal__body'>
         {children || 'Sample content'}
-      </div>
+        </div>
     );
-  }
-  
-  export function ModalFooter({ children }: { children: ReactNode }) {
+}
+export function ModalFooter({ children }: { children: ReactNode }) {
     return (
-      <div className='c-modal__footer'>
+        <div className='c-modal__footer'>
         {children || 'Sample footer'}
-      </div>
+        </div>
     );
-  }
+}
