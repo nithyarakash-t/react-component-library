@@ -17,6 +17,9 @@ const meta: Meta<typeof Accordion> = {
     customClass: { control: 'text' },
     accordionId: { control: 'text' },
   },
+  args: {
+    customClass: 'example-accordion'
+  },
   // Add subcomponents so they appear in the docs
   subcomponents: { Collapse, CollapseControl, CollapseContent },
 };
@@ -27,7 +30,6 @@ type Story = StoryObj<typeof Accordion>;
 export const Default: Story = {
   args: {
     accordionId: 'def-accordion',
-    customClass: 'example-accordion'
   },
 
   render: (args) => {

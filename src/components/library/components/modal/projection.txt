@@ -1,0 +1,302 @@
+1. Create specialized modal part components
+-------------------------------------------
+export function ModalHeader({ children }: { children: ReactNode }) {
+  const { modalId, closeDialog } = useContext(ModalContext);
+  
+  return (
+    <div className='c-modal__header'>
+      <button type='button' className='c-modal__header-close' aria-label='Close' onClick={closeDialog}>
+        Close
+      </button>
+      {children || <h2 className='c-modal__header-title' id={modalId + '-title'}>Dialog title</h2>}
+    </div>
+  );
+}
+
+export function ModalBody({ children }: { children: ReactNode }) {
+  return (
+    <div className='c-modal__body'>
+      {children || 'Sample content'}
+    </div>
+  );
+}
+
+export function ModalFooter({ children }: { children: ReactNode }) {
+  return (
+    <div className='c-modal__footer'>
+      {children || 'Sample footer'}
+    </div>
+  );
+}
+
+Modify Modal component to find and render these children
+export function Modal({modalId, customClass, position='fixed', role='dialog', open=false, hasBackdrop=true, children, ...props}: ModalProps) {
+  const [isOpen, setIsOpen] = useState(open);
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  
+  // Find specific child components
+  let header, body, footer;
+  
+  React.Children.forEach(children, child => {
+    if (!React.isValidElement(child)) return;
+    
+    if (child.type === ModalHeader) {
+      header = child;
+    } else if (child.type === ModalBody) {
+      body = child;
+    } else if (child.type === ModalFooter) {
+      footer = child;
+    }
+  });
+  
+  // Rest of your existing code...
+  
+  return (
+    <ModalContext.Provider value={{modalId, isOpen, toggleDialog, openDialog, closeDialog}}>
+      {/* Render any children that aren't specialized modal parts */}
+      {React.Children.map(children, child => {
+        if (
+          !React.isValidElement(child) || 
+          (child.type !== ModalHeader && child.type !== ModalBody && child.type !== ModalFooter)
+        ) {
+          return child;
+        }
+        return null;
+      })}
+      
+      <dialog 
+        ref={dialogRef} 
+        id={modalId} 
+        role={role} 
+        className={`c-modal__wrap${customClass ? ` ${customClass}` : ''}`} 
+        data-position={position}
+        data-hasbackdrop={hasBackdrop}
+        aria-labelledby={modalId + '-title'} 
+        {...props}
+      >
+        <div className='c-modal__container'>
+          {/* Render the specialized parts or fallbacks */}
+          {header || (
+            <div className='c-modal__header'>
+              <button type='button' className='c-modal__header-close' aria-label='Close' onClick={closeDialog}>Close</button>
+              <h2 className='c-modal__header-title' id={modalId + '-title'}>Dialog title</h2>
+            </div>
+          )}
+          
+          {body || (
+            <div className='c-modal__body'>
+              Sample content
+            </div>
+          )}
+          
+          {footer || (
+            <div className='c-modal__footer'>
+              Sample footer
+            </div>
+          )}
+        </div>
+      </dialog>
+    </ModalContext.Provider>
+  );
+}
+
+USAGE
+<Modal modalId="example-modal">
+  <ModalControl />
+  
+  <ModalHeader>
+    <h2 id="example-modal-title">Custom Header</h2>
+  </ModalHeader>
+  
+  <ModalBody>
+    <p>This is my custom body content</p>
+    <form>
+      <input type="text" placeholder="Name" />
+    </form>
+  </ModalBody>
+  
+  <ModalFooter>
+    <button>Cancel</button>
+    <button>Submit</button>
+  </ModalFooter>
+</Modal>
+-----------------------------------------------------------
+-----------------------------------------------------------
+2. Using Props for Content Sections
+-----------------------------------
+export function Modal({
+  modalId,
+  customClass,
+  position = 'fixed',
+  role = 'dialog',
+  open = false,
+  hasBackdrop = true,
+  headerContent,
+  bodyContent,
+  footerContent,
+  children,
+  ...props
+}: ModalProps & {
+  headerContent?: ReactNode;
+  bodyContent?: ReactNode;
+  footerContent?: ReactNode;
+}) {
+  // Your existing code...
+  
+  return (
+    <ModalContext.Provider value={{modalId, isOpen, toggleDialog, openDialog, closeDialog}}>
+      {children}
+      <dialog ref={dialogRef} id={modalId} role={role} className={`c-modal__wrap${customClass ? ` ${customClass}` : ''}`} 
+        data-position={position} data-hasbackdrop={hasBackdrop} aria-labelledby={modalId + '-title'} {...props}>
+        <div className='c-modal__container'>
+          <div className='c-modal__header'>
+            {headerContent || (
+              <>
+                <button type='button' className='c-modal__header-close' aria-label='Close' onClick={closeDialog}>Close</button>
+                <h2 className='c-modal__header-title' id={modalId + '-title'}>Dialog title</h2>
+              </>
+            )}
+          </div>
+          <div className='c-modal__body'>
+            {bodyContent || 'Sample content'}
+          </div>
+          <div className='c-modal__footer'>
+            {footerContent || 'Sample footer'}
+          </div>
+        </div>
+      </dialog>
+    </ModalContext.Provider>
+  );
+}
+
+USAGE
+<Modal 
+  modalId="example-modal"
+  headerContent={<h2>Custom Header</h2>}
+  bodyContent={<p>Custom body content</p>}
+  footerContent={<button>Custom Footer Button</button>}
+>
+  <ModalControl />
+</Modal>
+-----------------------------------------------------------
+-----------------------------------------------------------
+ 3. Using Object Children
+ -----------------------
+ export function Modal({
+  modalId,
+  customClass,
+  position = 'fixed',
+  role = 'dialog',
+  open = false,
+  hasBackdrop = true,
+  children,
+  ...props
+}: ModalProps) {
+  // Your existing code...
+  
+  // Get content sections from children object
+  const childrenObj = children as Record<string, ReactNode>;
+  const headerContent = childrenObj.header;
+  const bodyContent = childrenObj.body;
+  const footerContent = childrenObj.footer;
+  
+  return (
+    <ModalContext.Provider value={{modalId, isOpen, toggleDialog, openDialog, closeDialog}}>
+      {childrenObj.control}
+      <dialog ref={dialogRef} id={modalId} role={role} className={`c-modal__wrap${customClass ? ` ${customClass}` : ''}`} 
+        data-position={position} data-hasbackdrop={hasBackdrop} aria-labelledby={modalId + '-title'} {...props}>
+        <div className='c-modal__container'>
+          <div className='c-modal__header'>
+            {headerContent || (
+              <>
+                <button type='button' className='c-modal__header-close' aria-label='Close' onClick={closeDialog}>Close</button>
+                <h2 className='c-modal__header-title' id={modalId + '-title'}>Dialog title</h2>
+              </>
+            )}
+          </div>
+          <div className='c-modal__body'>
+            {bodyContent || 'Sample content'}
+          </div>
+          <div className='c-modal__footer'>
+            {footerContent || 'Sample footer'}
+          </div>
+        </div>
+      </dialog>
+    </ModalContext.Provider>
+  );
+}
+
+USAGE
+<Modal modalId="example-modal">
+  {{
+    control: <ModalControl />,
+    header: <h2>Custom Header</h2>,
+    body: <p>Custom body content</p>,
+    footer: <button>Custom Footer Button</button>,
+  }}
+</Modal>
+-----------------------------------------------------------
+-----------------------------------------------------------
+4. Using Render Props
+---------------------
+export function Modal({
+  modalId,
+  customClass,
+  position = 'fixed',
+  role = 'dialog',
+  open = false,
+  hasBackdrop = true,
+  renderHeader,
+  renderBody,
+  renderFooter,
+  children,
+  ...props
+}: ModalProps & {
+  renderHeader?: (props: { closeDialog: () => void, modalId: string }) => ReactNode;
+  renderBody?: () => ReactNode;
+  renderFooter?: () => ReactNode;
+}) {
+  // Your existing code...
+  
+  return (
+    <ModalContext.Provider value={{modalId, isOpen, toggleDialog, openDialog, closeDialog}}>
+      {children}
+      <dialog ref={dialogRef} id={modalId} role={role} className={`c-modal__wrap${customClass ? ` ${customClass}` : ''}`} 
+        data-position={position} data-hasbackdrop={hasBackdrop} aria-labelledby={modalId + '-title'} {...props}>
+        <div className='c-modal__container'>
+          <div className='c-modal__header'>
+            {renderHeader ? renderHeader({ closeDialog, modalId }) : (
+              <>
+                <button type='button' className='c-modal__header-close' aria-label='Close' onClick={closeDialog}>Close</button>
+                <h2 className='c-modal__header-title' id={modalId + '-title'}>Dialog title</h2>
+              </>
+            )}
+          </div>
+          <div className='c-modal__body'>
+            {renderBody ? renderBody() : 'Sample content'}
+          </div>
+          <div className='c-modal__footer'>
+            {renderFooter ? renderFooter() : 'Sample footer'}
+          </div>
+        </div>
+      </dialog>
+    </ModalContext.Provider>
+  );
+}
+
+USAGE
+<Modal 
+  modalId="example-modal"
+  renderHeader={({ closeDialog, modalId }) => (
+    <div>
+      <h2 id={modalId + '-title'}>Custom Header</h2>
+      <button onClick={closeDialog}>X</button>
+    </div>
+  )}
+  renderBody={() => <p>Custom body content</p>}
+  renderFooter={() => <button>Custom Footer Button</button>}
+>
+  <ModalControl />
+</Modal>
+-----------------------------------------------------------
+-----------------------------------------------------------
