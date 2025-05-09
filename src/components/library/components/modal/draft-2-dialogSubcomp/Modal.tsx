@@ -1,21 +1,14 @@
 import { ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import { ModalContext  } from './ModalContext';
 import './Modal.scss';
-// https://www.npmjs.com/package/storybook-addon-deep-controls
+
 export interface ModalProps {
     modalId: string;
     open?: boolean;
-
-    // dialog ----
-    customClass?: string;
-    position?: 'fixed' | 'absolute';
-    role?: 'dialog' | 'alertdialog';
-    hasBackdrop?: boolean;
-
     children?: ReactNode;
 }
 
-export function Modal({modalId, open=false, customClass='', position='fixed', role='dialog', hasBackdrop=true, children}: ModalProps) {
+export function Modal({modalId, open=false, children}: ModalProps) {
     const [isOpen, setIsOpen] = useState(open);
 
     function toggleDialog() {
@@ -27,10 +20,9 @@ export function Modal({modalId, open=false, customClass='', position='fixed', ro
     function closeDialog() {
         setIsOpen(false);
     }
-    //dialog ui methods - end
 
     return(
-        <ModalContext.Provider value={{modalId, isOpen,     customClass, position, role, hasBackdrop,   setIsOpen, toggleDialog, openDialog, closeDialog}}>
+        <ModalContext.Provider value={{modalId, isOpen, setIsOpen, toggleDialog, openDialog, closeDialog}}>
             {children}
         </ModalContext.Provider>
     )
@@ -50,15 +42,20 @@ export function ModalControl() {
 }
 
 interface ModalDialogProps {
+    customClass?: string;
+    position?: 'fixed' | 'absolute';
+    role?: 'dialog' | 'alertdialog';
+    hasBackdrop?: boolean;
+
     children?: ReactNode;
 }
 
-export function ModalDialog({children, ...props}: ModalDialogProps) {
+export function ModalDialog({customClass='', position='fixed', role='dialog', hasBackdrop=true, children, ...props}: ModalDialogProps) {
     const modalContext = useContext(ModalContext);
     if(!modalContext) {
         throw new Error('ModalDialog should be used within a Modal component');
     }
-    const {modalId, isOpen,    customClass, position, role, hasBackdrop,    setIsOpen, closeDialog} = modalContext;
+    const {modalId, isOpen, setIsOpen, closeDialog} = modalContext;
 
     const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -94,6 +91,7 @@ export function ModalDialog({children, ...props}: ModalDialogProps) {
             window.removeEventListener('keydown', handleKeyDown);
         }
     }, [setIsOpen])
+    //dialog ui methods - end
 
     return (
         <dialog ref={dialogRef} id={modalId} role={role}  className={`c-modal__wrap${customClass ? ` ${customClass}` : ''}`} data-position={position}
@@ -101,19 +99,20 @@ export function ModalDialog({children, ...props}: ModalDialogProps) {
                 aria-labelledby={modalId + '-title'} {...props}>
             <div className='c-modal__container'>
                 {
-                    children ? children
+                    children ? 
+                    children
                     :
                     <>
-                        <section className='c-modal__header'>
+                        <div className='c-modal__header'>
                             <button type='button' className='c-modal__header-close' aria-label='Close' onClick={closeDialog}>Close</button>
                             <h2 className='c-modal__header-title' id={modalId + '-title'}>Dialog title</h2>
-                        </section>
-                        <section className='c-modal__body'>
+                        </div>
+                        <div className='c-modal__body'>
                             Sample content
-                        </section>
-                        <section className='c-modal__footer'>
+                        </div>
+                        <div className='c-modal__footer'>
                             Sample footer
-                        </section>
+                        </div>
                     </>
                 }
             </div>
