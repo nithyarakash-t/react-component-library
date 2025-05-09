@@ -24,6 +24,7 @@ const meta: Meta<typeof Modal> = {
 
   },
   args: {
+    modalId: 'def-modal',
     open: false,
     // dialog ----
     position: "fixed",
