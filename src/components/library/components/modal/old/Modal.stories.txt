@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { 
   Modal, 
+  ModalBody, 
   ModalControl,
-  ModalDialog
+  ModalFooter,
+  ModalHeader
 } from '../../components/library/components/modal/Modal';
 import { ModalContext } from '../../components/library/components/modal/ModalContext';
 
@@ -14,23 +16,20 @@ const meta: Meta<typeof Modal> = {
   },
   tags: ['autodocs'],
   argTypes: {
-    modalId: { control: 'text' },
-    open: { control: 'boolean' },
-
-    hasBackdrop: {control: 'boolean'},    
     customClass: { control: 'text' },
+    modalId: { control: 'text' },
     position: {control:'radio', options: ['fixed', 'absolute']},
     role: {control:'select', options: ['dialog', 'alertdialog']},
-
+    open: { control: 'boolean' },
+    hasBackdrop: {control: 'boolean'},
   },
   args: {
-    open: true,
-
     position: "fixed",
     role: "dialog",
+    open: true,
     hasBackdrop: true
   },
-  subcomponents: {ModalControl, ModalDialog}
+  subcomponents: {ModalControl, ModalHeader, ModalBody, ModalFooter}
 };
 
 export default meta;
@@ -40,7 +39,6 @@ export const Default: Story = {
   args: {
     ...meta.args, // not needed
     modalId: 'def-modal',
-
     customClass: 'example-modal',
   },
 
@@ -49,30 +47,32 @@ export const Default: Story = {
       <Modal {...args}>
         <ModalControl />
 
-        <ModalContext.Consumer>
-          {(context) => {
+        <ModalHeader>
+            <ModalContext.Consumer>
+                {(context) => {
                     // Alt. from claude - Use non-null assertion to tell TypeScript this won't be undefined
                     // const { closeDialog } = context!;
 
                     if (!context) return null;
                     const { closeDialog } = context;
                     return (
-                      <ModalDialog>
-                      <section className='c-modal__header'>
-                          <button type='button' className='c-modal__header-close' aria-label='close' onClick={closeDialog} ></button>
-                          <h2 className='c-modal__header-title' id={args.modalId + '-title'}>Sample Modal</h2>
-                      </section>
-                      <section className='c-modal__body'>
-                        Lorem Ipsum
-                      </section>
-                      <section className='c-modal__footer'>
-                        <button type='button' aria-label='Cancel' onClick={closeDialog} >Cancel</button>
-                        <button type='button' aria-label='Submit' onClick={closeDialog} >Submit</button>
-                      </section>
-                    </ModalDialog>
+                        <>
+                            <button type='button' className='c-modal__header-close' aria-label='close' onClick={closeDialog} ></button>
+                            <h2 className='c-modal__header-title' id={args.modalId + '-title'}>Sample Modal</h2>
+                        </>
                     );
-            }}
-        </ModalContext.Consumer>
+                }}
+            </ModalContext.Consumer>
+        </ModalHeader>
+        
+        <ModalBody>
+            Lorem ipsum
+        </ModalBody>
+        
+        <ModalFooter>
+            <button>Cancel</button>
+            <button>Submit</button>
+        </ModalFooter>
       </Modal>
     )
   }

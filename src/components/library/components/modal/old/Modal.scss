@@ -39,6 +39,8 @@
           }
     }
     &__container {
+        --_width: min(40rem, 60vw);
+        --_padding-h: 2rem;
         display: flex;
         flex-direction: column;
         position: absolute;
@@ -47,13 +49,10 @@
         background-color: light-dark(#fff, #000);
         border: 1px solid light-dark(#000, #fff);
         width: var(--_width);
-        max-height: var(--_max-height);
+        max-height: 80vh;
     }
     &__wrap {
         --_transition-duration: .3s;
-        --_width: min(40rem, 60vw);
-        --_max-height: 80vh;
-        --_padding-h: 2rem;
         position: fixed;
         inset: 0;
         width: 100%;
@@ -96,8 +95,6 @@
 
         &[data-position="absolute"] {
             position: absolute;
-            --_width: min(40rem, 60%);
-            --_max-height: 80%;
         }
         &[data-position="fixed"] {
             position: fixed;
