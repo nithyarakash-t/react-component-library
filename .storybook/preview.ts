@@ -10,19 +10,56 @@ const preview: Preview = {
        date: /Date$/i,
       },
     },
+    backgrounds: {
+      default: 'white',
+      values: [
+        { name: 'white', value: '#ffffff' },
+        { name: 'black', value: '#000000' },
+        { name: 'gray', value: '#f8f8f8' },
+      ],
+    },
+    // Add theme configuration
+    darkMode: {
+      current: 'light',
+      dark: { appBg: '#000' },
+      light: { appBg: '#fff' }
+    }
+    
   },
   decorators: [
-    (Story) => React.createElement(React.Fragment, null, React.createElement(Story, null))
+    (Story, context) => {
+      // Set data-theme attribute based on current theme
+      const isDarkMode = context.globals.backgrounds?.value === '#333333' || 
+                         context.globals.theme === 'dark' || 
+                         (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      
+      document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+      
+      return React.createElement(React.Fragment, null, React.createElement(Story, null));
+    }
   ],
-
-  //Allowed if preview is .tsx
-  // decorators: [
-  //   (Story) => (
-  //     <React.Fragment>
-  //       <Story />
-  //     </React.Fragment>
-  //   ),
+  // Allowed if preview is .tsx
+  // decorators: [ \
+  //   (Story) => ( <React.Fragment> <Story /> </React.Fragment> ), 
   // ],
+};
+
+// Add global types for theme selection
+preview.globalTypes = {
+  ...preview.globalTypes,
+  theme: {
+    name: 'Theme',
+    description: 'Global theme for components',
+    defaultValue: 'light',
+    toolbar: {
+      icon: 'circlehollow',
+      items: [
+        { value: 'light', icon: 'circlehollow', title: 'Light' },
+        { value: 'dark', icon: 'circle', title: 'Dark' }
+      ],
+      showName: true,
+    },
+  },
 };
 
 export default preview;
