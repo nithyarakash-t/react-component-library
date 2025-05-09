@@ -38,10 +38,6 @@ const preview: Preview = {
       return React.createElement(React.Fragment, null, React.createElement(Story, null));
     }
   ],
-  // Allowed if preview is .tsx
-  // decorators: [ \
-  //   (Story) => ( <React.Fragment> <Story /> </React.Fragment> ), 
-  // ],
 };
 
 // Add global types for theme selection

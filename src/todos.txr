@@ -4,6 +4,10 @@ CONFIGURATION
 TODO - Subcomponent controls / deep nested controls
        - OPTION - https://www.npmjs.com/package/storybook-addon-deep-controls
 TODO - Theme switch - proper
+       - Context Theme
+       - https://storybook.js.org/addons/storybook-addon-themes
+       - https://storybook.js.org/addons/@storybook/addon-themes
+
 TODO - [ DOCUMENTATION FOR EVERYTHING ]
 TODO - Storybook UI configuration - refer to nerdy.dev and other such books
 TOFIX - https://github.com/storybookjs/storybook/issues/30356

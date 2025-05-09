@@ -1,0 +1,9 @@
+  // Allowed if preview.ts is .tsx
+  // decorators: [ \
+  //   (Story) => ( <React.Fragment> <Story /> </React.Fragment> ), 
+  // ],
+
+  // now using
+   decorators: [
+    (Story) => React.createElement(React.Fragment, null, React.createElement(Story, null))
+  ],
