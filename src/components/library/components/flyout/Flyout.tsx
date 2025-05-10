@@ -1,6 +1,7 @@
 import { ReactNode, useContext, useEffect, useRef, useState } from "react";
 import { FlyoutContext, useFlyoutContext } from "./FlyoutContext";
 import './Flyout.scss';
+import { Button } from "../../elements/button/Button";
 
 //1 - Flyout comp. - wrapper - START
 export interface FlyoutProps {
@@ -119,6 +120,6 @@ export function FlyoutControl() {
    const { flyoutId, isOpen, openFlyout } = flyoutContext;
 
     return (
-        <button type='button' aria-controls={flyoutId} aria-expanded={isOpen} onClick={openFlyout}>Open Flyout</button>
+        <Button type='button' aria-controls={flyoutId} aria-expanded={isOpen} onClick={openFlyout}>Open Flyout</Button>
     )
 }

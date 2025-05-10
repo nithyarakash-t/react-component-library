@@ -1,6 +1,7 @@
 import { ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import { ModalContext  } from './ModalContext';
 import './Modal.scss';
+import { Button } from '../../elements/button/Button';
 
 //1 - Modal
 export interface ModalProps {
@@ -118,6 +119,6 @@ export function ModalControl() {
     const { modalId, isOpen, openDialog } = modalContext;
 
     return (
-        <button type='button' aria-controls={modalId} aria-expanded={isOpen} onClick={openDialog}>Open Modal</button>
+        <Button type='button' aria-controls={modalId} aria-expanded={isOpen} onClick={openDialog}>Open Modal</Button>
     )
 }

@@ -13,7 +13,7 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     type: {control:'select', options:['button', 'submit']},
     customClass: { control: 'text' },
-    variant: {control:'radio', options:['primary', 'secondary', 'tertiory']},
+    variant: {control:'radio', options:['primary', 'secondary', 'tertiary']},
   },
   args: {
     customClass: '',
@@ -27,8 +27,6 @@ type Story = StoryObj<typeof Button>;
 
 export const Primary: Story = {
   args: {
-    customClass: '',
-    type: 'button',
     variant: 'primary',
   },
 
@@ -38,6 +36,32 @@ export const Primary: Story = {
             Primary Button
         </Button>
     )
-  }
-    
+  } 
+};
+
+export const Secondary: Story = {
+  args: {
+    variant: 'secondary',
+  },
+
+  render: (args) => {
+    return (
+        <Button {...args}>
+            Secondary Button
+        </Button>
+    )
+  } 
+};
+export const Tertiary: Story = {
+  args: {
+    variant: 'tertiary',
+  },
+
+  render: (args) => {
+    return (
+        <Button {...args}>
+            Tertiary Button
+        </Button>
+    )
+  } 
 };

@@ -6,6 +6,7 @@ import {
 } from '../../components/library/components/flyout/Flyout';
 import { FlyoutContext } from '../../components/library/components/flyout/FlyoutContext';
 import { FlyoutProps } from '../../components/library/components/flyout/Flyout';
+import { Button } from '../../components/library/elements/button/Button';
 
 interface ExtendedFlyoutProps extends FlyoutProps {
   flyoutDialog?: {
@@ -47,7 +48,7 @@ const meta: Meta<ExtendedFlyoutProps> = {
       hasBackdrop: true
     },
   },
-  subcomponents: {FlyoutControl, FlyoutDialog}
+  subcomponents: {FlyoutControl, FlyoutDialog, Button}
 };
 
 export default meta;
@@ -60,7 +61,7 @@ export const Default: Story = {
     flyoutDialog: {
       "customClass": "def-flyout",
       "position": "fixed",
-      "alignment": "top",
+      "alignment": "right",
       "role": "dialog",
       "hasBackdrop": true
     }
@@ -89,8 +90,8 @@ export const Default: Story = {
                   Lorem Ipsum
                 </section>
                 <section className='c-flyout__footer'>
-                  <button type='button' aria-label='Cancel' onClick={closeFlyout} >Cancel</button>
-                  <button type='button' aria-label='Submit' onClick={closeFlyout} >Submit</button>
+                  <Button type='button' aria-label='Cancel' onClick={closeFlyout} >Cancel</Button>
+                  <Button type='button' aria-label='Submit' onClick={closeFlyout} >Submit</Button>
                 </section>
               </FlyoutDialog>
             );
