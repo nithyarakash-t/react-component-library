@@ -3,7 +3,7 @@ import './App.scss'
 import { ReleaseNotes } from './components/layout/releasenotes/Releasenotes'
 import { Header } from './components/layout/header/Header'
 import { Footer } from './components/layout/footer/Footer'
-import { ThemeProvider } from './components/layout/themeSwitch/Themecontext'
+import { ThemeProvider } from './components/layout/themeSwitch/ThemeProvider'
 
 function App() {
 
