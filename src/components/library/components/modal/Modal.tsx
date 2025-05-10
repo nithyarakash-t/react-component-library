@@ -1,7 +1,8 @@
 import { ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import { ModalContext  } from './ModalContext';
 import './Modal.scss';
-// https://www.npmjs.com/package/storybook-addon-deep-controls
+
+//1 - Modal
 export interface ModalProps {
     modalId: string;
     open?: boolean;
@@ -14,7 +15,6 @@ export interface ModalProps {
 
     children?: ReactNode;
 }
-
 export function Modal({modalId, open=false, customClass='', position='fixed', role='dialog', hasBackdrop=true, children}: ModalProps) {
     const [isOpen, setIsOpen] = useState(open);
 
@@ -27,7 +27,6 @@ export function Modal({modalId, open=false, customClass='', position='fixed', ro
     function closeDialog() {
         setIsOpen(false);
     }
-    //dialog ui methods - end
 
     return(
         <ModalContext.Provider value={{modalId, isOpen,     customClass, position, role, hasBackdrop,   setIsOpen, toggleDialog, openDialog, closeDialog}}>
@@ -36,29 +35,16 @@ export function Modal({modalId, open=false, customClass='', position='fixed', ro
     )
 }
 
-//Control - sample
-export function ModalControl() {
-    const modalContext = useContext(ModalContext);
-    if (!modalContext) {
-        throw new Error('ModalControl must be used within a Modal component');
-    }
-    const { modalId, isOpen, openDialog } = modalContext;
-
-    return (
-        <button type='button' aria-controls={modalId} aria-expanded={isOpen} onClick={openDialog}>Open Modal</button>
-    )
-}
-
+//2 - Modal dialog
 interface ModalDialogProps {
     children?: ReactNode;
 }
-
 export function ModalDialog({children, ...props}: ModalDialogProps) {
     const modalContext = useContext(ModalContext);
     if(!modalContext) {
         throw new Error('ModalDialog should be used within a Modal component');
     }
-    const {modalId, isOpen,    customClass, position, role, hasBackdrop,    setIsOpen, closeDialog} = modalContext;
+    const {modalId, isOpen,    customClass, position, role, hasBackdrop,    closeDialog} = modalContext;
 
     const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -79,11 +65,11 @@ export function ModalDialog({children, ...props}: ModalDialogProps) {
         const dialog = (dialogRef.current as HTMLDialogElement);
         //Close dialog on escape
         function handleKeyDown(e:KeyboardEvent) {
-            if(e.key === 'Escape') setIsOpen(false);
+            if(e.key === 'Escape') closeDialog();
         }
         //Close dialog on backdrop click
         function handlePointerDown(event:PointerEvent) {
-            if ( event.target === dialog ) setIsOpen(false);
+            if ( event.target === dialog ) closeDialog();
         }
         
         dialog.addEventListener('pointerdown', handlePointerDown)
@@ -93,7 +79,8 @@ export function ModalDialog({children, ...props}: ModalDialogProps) {
             dialog.removeEventListener('pointerdown', handlePointerDown)
             window.removeEventListener('keydown', handleKeyDown);
         }
-    }, [setIsOpen])
+    }, [closeDialog])
+    //dialog ui methods - end
 
     return (
         <dialog ref={dialogRef} id={modalId} role={role}  className={`c-modal__wrap${customClass ? ` ${customClass}` : ''}`} data-position={position}
@@ -118,5 +105,19 @@ export function ModalDialog({children, ...props}: ModalDialogProps) {
                 }
             </div>
         </dialog>
+    )
+}
+
+
+//3- Control - sample
+export function ModalControl() {
+    const modalContext = useContext(ModalContext);
+    if (!modalContext) {
+        throw new Error('ModalControl must be used within a Modal component');
+    }
+    const { modalId, isOpen, openDialog } = modalContext;
+
+    return (
+        <button type='button' aria-controls={modalId} aria-expanded={isOpen} onClick={openDialog}>Open Modal</button>
     )
 }
