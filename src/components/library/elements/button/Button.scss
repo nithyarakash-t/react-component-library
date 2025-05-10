@@ -1,0 +1,15 @@
+.o-button {
+    & {
+        --_bg: light-dark(#000, #fff);
+        --_color: light-dark(#fff, #000);
+        display: inline-flex;
+        padding: 0.5rem 1rem;
+        background: var(--_bg);
+        color: var(--_color);
+        border: 1px solid var(--_color);
+        border-radius: 0;
+    }
+    &[data-variant='primary'] {
+
+    }
+}

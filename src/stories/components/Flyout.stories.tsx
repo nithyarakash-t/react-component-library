@@ -4,7 +4,7 @@ import {
   FlyoutControl,
   FlyoutDialog
 } from '../../components/library/components/flyout/Flyout';
-import { FlyoutContext } from '../../components/library/components/flyout/flyoutContext';
+import { FlyoutContext } from '../../components/library/components/flyout/FlyoutContext';
 import { FlyoutProps } from '../../components/library/components/flyout/Flyout';
 
 interface ExtendedFlyoutProps extends FlyoutProps {

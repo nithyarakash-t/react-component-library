@@ -1,5 +1,5 @@
 import { ReactNode, useContext, useEffect, useRef, useState } from "react";
-import { FlyoutContext, useFlyoutContext } from "./flyoutContext";
+import { FlyoutContext, useFlyoutContext } from "./FlyoutContext";
 import './Flyout.scss';
 
 //1 - Flyout comp. - wrapper - START
