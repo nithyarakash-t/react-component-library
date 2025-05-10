@@ -65,33 +65,22 @@
         max-height: none;
         background-color: transparent;
         border: none;
-        // opacity: 0;
-        // transition: opacity 3s allow-discrete ease;
-    
-        &:where(&[open],
-        &:open) {
-          &::backdrop {
-            background-color: rgba(0, 0, 0, 0.15);
-            backdrop-filter: blur(0.625rem);
-          }
-          .c-modal__container {
-            animation: content var(--_transition-duration) ease forwards;
-          }
-          & {
-            animation: dialog var(--_transition-duration) ease forwards;
-          }
+        opacity: 0;
+        transition: opacity var(--_transition-duration) allow-discrete ease; // display var(--_transition-duration) allow-discrete ease;
+
+        &::backdrop {
+          background-color: rgba(0, 0, 0, 0.15);
+          backdrop-filter: blur(0.625rem);
+          transition: opacity var(--_transition-duration) allow-discrete ease;
         }
 
-        &:not(&[open]),
-        &:not(&:open) {
-            .c-modal__container {
-                animation: content var(--_transition-duration) ease forwards;
-                animation-direction: reverse;
+        &:where(&[open], &:open) {
+          opacity: 1;
+          &::backdrop {
+            @starting-style {
+              opacity: 0;
             }
-            & {
-                animation: dialog var(--_transition-duration) ease forwards;
-                animation-direction: reverse;
-            }
+          }
         }
 
         &[data-position="absolute"] {
@@ -111,23 +100,5 @@
                 pointer-events: all;
             }
         }
-    }
-}
-
-@keyframes dialog {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes content {
-    from {
-        transform: translate(0, -50px) scale(0.75);
-    }
-    to {
-        transform: translate(0, 0) scale(1);
     }
 }
