@@ -1,5 +1,6 @@
 import './Themeswitch.scss';
-import { Theme, useTheme } from './Themecontext';
+import { Theme } from './ThemeProvider';
+import { useTheme } from './ThemeContext';
 
 // Cookie popup - add
 export function Themeswitch() {

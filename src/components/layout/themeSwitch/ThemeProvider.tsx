@@ -1,12 +1,8 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-
+import React, { useEffect, useState } from "react";
+import { ThemeContext } from "./ThemeContext";
 export type Theme = 'light' | 'dark';
-type ThemeContextType = {
-    theme:Theme,
-    setTheme: React.Dispatch<React.SetStateAction<Theme>>
-}
+
 const STORAGE_KEY = "theme-preference";
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({children}) => {
     const [theme, setTheme] = useState<Theme>(getColorPreference() ?? 'light');
@@ -36,13 +32,3 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({children
     );
 }
 
-
-// Custom hook to use the context
-export const useTheme = () => {
-    const context = useContext(ThemeContext);
-    if (!context) {
-      throw new Error("useTheme must be used within a ThemeProvider");
-    }
-    return context;
-};
-  

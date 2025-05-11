@@ -5,6 +5,7 @@ import {
   ModalDialog
 } from '../../components/library/components/modal/Modal';
 import { ModalContext } from '../../components/library/components/modal/ModalContext';
+import { Button } from '../../components/library/elements/button/Button';
 
 const meta: Meta<typeof Modal> = {
   title: 'Components/Modal',
@@ -31,7 +32,7 @@ const meta: Meta<typeof Modal> = {
     role: "dialog",
     hasBackdrop: true
   },
-  subcomponents: {ModalControl, ModalDialog}
+  subcomponents: {ModalControl, ModalDialog, Button}
 };
 
 export default meta;
@@ -67,8 +68,8 @@ export const Default: Story = {
                           Lorem Ipsum
                         </section>
                         <section className='c-modal__footer'>
-                          <button type='button' aria-label='Cancel' onClick={closeDialog} >Cancel</button>
-                          <button type='button' aria-label='Submit' onClick={closeDialog} >Submit</button>
+                          <Button type='button' aria-label='Cancel' onClick={closeDialog} >Cancel</Button>
+                          <Button type='button' aria-label='Submit' onClick={closeDialog} >Submit</Button>
                         </section>
                     </ModalDialog>
                     );

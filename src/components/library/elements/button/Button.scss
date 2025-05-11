@@ -1,0 +1,40 @@
+.o-button {
+    & {
+        --_bg: light-dark(#000, #fff);
+        --_color: light-dark(#fff, #000);
+        --_hover-bg: light-dark(#400673, #bb86fc);
+        --_hover-color: var(--_color);
+        display: inline-flex;
+        gap: 1rem;
+        padding: 0.75rem 1rem;
+        background: var(--_bg);
+        color: var(--_color);
+        border: 1px solid var(--_color);
+        border-radius: 0;
+        &:hover,
+        &:focus-visible {
+            background: var(--_hover-bg);
+            color: var(--_hover-color);
+            border-color: var(--_hover-color);
+        }
+    }
+    &[data-variant='primary'] {
+        --_bg: light-dark(#000, #fff);
+        --_color: light-dark(#fff, #000);
+        --_hover-bg: light-dark(#406673, #bb86fc);
+        --_hover-color: var(--_color);
+    }
+    &[data-variant='secondary'] {
+        --_bg: light-dark(#fff, #000);
+        --_color: light-dark(#000, #fff);
+        --_hover-bg: var(--_bg);
+        --_hover-color: light-dark(#400673, #bb86fc);
+    }
+    &[data-variant='tertiary'] {
+        --_bg: transparent;
+        --_color: light-dark(#000, #fff);
+        --_hover-bg: transparent;
+        --_hover-color: light-dark(#400673, #bb86fc);
+        border: none;
+    }
+}
