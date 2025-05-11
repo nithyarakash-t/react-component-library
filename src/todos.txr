@@ -17,17 +17,22 @@ TOFIX - https://github.com/storybookjs/storybook/issues/30356
 COMPONENTS
 ----------
 
-UI COMPLETED
------
-
 COMPLETED
 -----
 Accordion
-Modal - closeOut animation
+Modal
+       - in and out animation - esp. closeOut animation (w/o dom manipulation)
+       - remove backdrop - handle on dialog
+       - trap tab key
+       - set focus in / out
+Flyout
+       - in and out animation - esp. closeOut animation (w/o dom manipulation)
+       - remove backdrop - handle on dialog
+       - trap tab key
+       - set focus in / out
 
 PENDING
 -----
-Flyout
 Base Select - Chrome only
 Dropdown
 Dropmenu / Select
