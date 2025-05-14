@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import './Checkbox.scss';
+import './Chckbox.scss';
 
 export interface CheckboxProps {
     customClass?:string,
