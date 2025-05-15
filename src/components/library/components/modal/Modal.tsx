@@ -2,23 +2,18 @@ import { ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import { ModalContext  } from './ModalContext';
 import './Modal.scss';
 import { Button } from '../../elements/button/Button';
+import { setFocusToFirstItem, trapTabKey } from '../../../../assets/scripts/utils/util';
 
 //1 - Modal
 export interface ModalProps {
     modalId: string;
     open?: boolean;
-
-    // dialog ----
-    customClass?: string;
-    position?: 'fixed' | 'absolute';
-    role?: 'dialog' | 'alertdialog';
-    hasBackdrop?: boolean;
-
     children?: ReactNode;
 }
-export function Modal({modalId, open=false, customClass='', position='fixed', role='dialog', hasBackdrop=true, children}: ModalProps) {
+export function Modal({modalId, open=false, children}: ModalProps) {
     const [isOpen, setIsOpen] = useState(open);
 
+    // Modal fns. - start
     function toggleDialog() {
         setIsOpen(!isOpen);
     }
@@ -28,24 +23,29 @@ export function Modal({modalId, open=false, customClass='', position='fixed', ro
     function closeDialog() {
         setIsOpen(false);
     }
+    // Modal fns. - end
 
     return(
-        <ModalContext.Provider value={{modalId, isOpen,     customClass, position, role, hasBackdrop,   setIsOpen, toggleDialog, openDialog, closeDialog}}>
+        <ModalContext.Provider value={{modalId, isOpen, setIsOpen, toggleDialog, openDialog, closeDialog}}>
             {children}
         </ModalContext.Provider>
     )
 }
 
 //2 - Modal dialog
-interface ModalDialogProps {
+export interface ModalDialogProps {
+    role?:'dialog' | 'alertdialog';
+    customClass?:string;
+    position?: 'absolute' | 'fixed';
+    hasBackdrop?:boolean;
     children?: ReactNode;
 }
-export function ModalDialog({children, ...props}: ModalDialogProps) {
+export function ModalDialog({customClass='', role='dialog', position='fixed', hasBackdrop=false, children, ...props}: ModalDialogProps) {
     const modalContext = useContext(ModalContext);
     if(!modalContext) {
         throw new Error('ModalDialog should be used within a Modal component');
     }
-    const {modalId, isOpen,    customClass, position, role, hasBackdrop,    closeDialog} = modalContext;
+    const {modalId, isOpen, closeDialog} = modalContext;
 
     const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -55,6 +55,7 @@ export function ModalDialog({children, ...props}: ModalDialogProps) {
         if(isOpen) {
             dialogRef.current?.showModal();
             document.body.style.setProperty('overflow', 'hidden');
+            setFocusToFirstItem(dialogRef.current as HTMLElement);
         }
         else {
             dialogRef.current?.close();
@@ -62,17 +63,21 @@ export function ModalDialog({children, ...props}: ModalDialogProps) {
         }
     }, [isOpen])
 
+    // useEffect for keyboardEvents
     useEffect(()=>{
         const dialog = (dialogRef.current as HTMLDialogElement);
-        //Close dialog on escape
-        function handleKeyDown(e:KeyboardEvent) {
+        //Close dialog on escape, trap tab key
+        function handleKeyDown(e:KeyboardEvent) { // role !== alertdialog
             if(e.key === 'Escape') closeDialog();
+            if(e.key === 'Tab') {
+                trapTabKey(dialogRef.current as HTMLElement, e);
+            }
         }
         //Close dialog on backdrop click
         function handlePointerDown(event:PointerEvent) {
             if ( event.target === dialog ) closeDialog();
         }
-        
+
         dialog.addEventListener('pointerdown', handlePointerDown)
         window.addEventListener('keydown', handleKeyDown);
 
@@ -108,7 +113,6 @@ export function ModalDialog({children, ...props}: ModalDialogProps) {
         </dialog>
     )
 }
-
 
 //3- Control - sample
 export function ModalControl() {

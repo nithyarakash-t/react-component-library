@@ -3,13 +3,6 @@ import { createContext, useContext } from 'react';
 export interface ModalContextType {
   modalId: string;
   isOpen: boolean;
-
-  // dialog ----
-  customClass: string;
-  position: 'fixed' | 'absolute';
-  role: 'dialog' | 'alertdialog';
-  hasBackdrop: boolean;
-
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   toggleDialog: () => void;
   openDialog: () => void;

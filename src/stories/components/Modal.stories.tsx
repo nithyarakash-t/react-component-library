@@ -2,12 +2,23 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { 
   Modal, 
   ModalControl,
-  ModalDialog
+  ModalDialog,
+  ModalProps
 } from '../../components/library/components/modal/Modal';
 import { ModalContext } from '../../components/library/components/modal/ModalContext';
 import { Button } from '../../components/library/elements/button/Button';
 
-const meta: Meta<typeof Modal> = {
+interface ExtendedModalProps extends ModalProps {
+  modalDialogProps?: {
+    customClass?: string;
+    position?: 'fixed' | 'absolute';
+    role?: 'dialog' | 'alertdialog';
+    hasBackdrop?: boolean;
+  }
+}
+
+
+const meta: Meta<ExtendedModalProps> = {
   title: 'Components/Modal',
   component: Modal,
   parameters: {
@@ -17,38 +28,52 @@ const meta: Meta<typeof Modal> = {
   argTypes: {
     modalId: { control: 'text' },
     open: { control: 'boolean' },
-    // dialog ----
-    hasBackdrop: {control: 'boolean'},    
-    customClass: { control: 'text' },
-    position: {control:'radio', options: ['fixed', 'absolute']},
-    role: {control:'select', options: ['dialog', 'alertdialog']},
+
+    // Modal Dialog subcomponent controls
+    modalDialogProps: {
+      customClass: { control: 'text' },
+      position: { control: 'radio', options: ['fixed', 'absolute'] },
+      role: { control: 'select', options: ['dialog', 'alertdialog'] },
+      alignment: {control: 'select', options: ['right', 'left', 'top', 'bottom']},
+      hasBackdrop: { control: 'boolean' },
+    },
 
   },
   args: {
     modalId: 'def-modal',
     open: false,
-    // dialog ----
-    position: "fixed",
-    role: "dialog",
-    hasBackdrop: true
+    modalDialogProps: {
+      customClass: '',
+      position: "fixed",
+      role: "dialog",
+      hasBackdrop: true
+    },
   },
   subcomponents: {ModalControl, ModalDialog, Button}
 };
 
 export default meta;
-type Story = StoryObj<typeof Modal>;
+type Story = StoryObj<ExtendedModalProps>;
 
 export const Default: Story = {
   args: {
     ...meta.args, // not needed
     modalId: 'def-modal',
-    // dialog ----
-    customClass: 'example-modal',
+    modalDialogProps: {
+        "customClass": "def-flyout",
+        "position": "fixed",
+        "role": "dialog",
+        "hasBackdrop": true
+      }
   },
 
   render: (args) => {
+    
+    // Separate subcmop. - modalDialogProps args from args
+    const { modalDialogProps, ...modalProps } = args;
+
     return (
-      <Modal {...args}>
+      <Modal {...modalProps}>
         <ModalControl />
 
         <ModalContext.Consumer>
@@ -59,7 +84,7 @@ export const Default: Story = {
                     if (!context) return null;
                     const { closeDialog } = context;
                     return (
-                      <ModalDialog>
+                      <ModalDialog {...modalDialogProps}>
                         <section className='c-modal__header'>
                             <button type='button' className='c-modal__header-close' aria-label='close' onClick={closeDialog} ></button>
                             <h2 className='c-modal__header-title' id={args.modalId + '-title'}>Sample Modal</h2>

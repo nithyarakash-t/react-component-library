@@ -2,6 +2,7 @@ import { ReactNode, useContext, useEffect, useRef, useState } from "react";
 import { FlyoutContext, useFlyoutContext } from "./FlyoutContext";
 import './Flyout.scss';
 import { Button } from "../../elements/button/Button";
+import { setFocusToFirstItem, trapTabKey } from '../../../../assets/scripts/utils/util';
 
 //1 - Flyout comp. - wrapper - START
 export interface FlyoutProps {
@@ -56,6 +57,7 @@ export function FlyoutDialog({customClass='', role='dialog', position='fixed', a
         if(isOpen) {
             flyoutRef.current?.showModal();
             document.body.style.setProperty('overflow', 'hidden');
+            setFocusToFirstItem(flyoutRef.current as HTMLElement);
         }
         else {
             flyoutRef.current?.close();
@@ -63,17 +65,21 @@ export function FlyoutDialog({customClass='', role='dialog', position='fixed', a
         }
     }, [isOpen])
 
+    // useEffect for keyboardEvents
     useEffect(()=>{
         const dialog = (flyoutRef.current as HTMLDialogElement);
-        //Close dialog on escape
-        function handleKeyDown(e:KeyboardEvent) {
+        //Close dialog on escape, trap tab key
+        function handleKeyDown(e:KeyboardEvent) { // role !== alertdialog
             if(e.key === 'Escape') closeFlyout();
+            if(e.key === 'Tab') {
+                trapTabKey(flyoutRef.current as HTMLElement, e);
+            }
         }
         //Close dialog on backdrop click
         function handlePointerDown(event:PointerEvent) {
             if ( event.target === dialog ) closeFlyout();
         }
-        
+
         dialog.addEventListener('pointerdown', handlePointerDown)
         window.addEventListener('keydown', handleKeyDown);
 

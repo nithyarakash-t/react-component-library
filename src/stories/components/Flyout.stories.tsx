@@ -9,7 +9,7 @@ import { FlyoutProps } from '../../components/library/components/flyout/Flyout';
 import { Button } from '../../components/library/elements/button/Button';
 
 interface ExtendedFlyoutProps extends FlyoutProps {
-  flyoutDialog?: {
+  flyoutDialogProps?: {
     customClass?: string;
     position?: 'fixed' | 'absolute';
     role?: 'dialog' | 'alertdialog';
@@ -30,7 +30,7 @@ const meta: Meta<ExtendedFlyoutProps> = {
     open: { control: 'boolean' },
     
     // Flyout Dialog subcomponent controls
-    flyoutDialog: {
+    flyoutDialogProps: {
       customClass: { control: 'text' },
       position: { control: 'radio', options: ['fixed', 'absolute'] },
       role: { control: 'select', options: ['dialog', 'alertdialog'] },
@@ -40,7 +40,7 @@ const meta: Meta<ExtendedFlyoutProps> = {
   },
   args: {
     open: false,
-    flyoutDialog: {
+    flyoutDialogProps: {
       customClass: '',
       position: "fixed",
       alignment: 'right',
@@ -58,7 +58,7 @@ export const Default: Story = {
   args: {
     ...meta.args, // not needed
     flyoutId: 'def-flyout',
-    flyoutDialog: {
+    flyoutDialogProps: {
       "customClass": "def-flyout",
       "position": "fixed",
       "alignment": "right",
@@ -69,8 +69,8 @@ export const Default: Story = {
 
   render: (args) => {
 
-    // Separate subcmop. - flyoutDialog args from args
-    const { flyoutDialog, ...flyoutProps } = args;
+    // Separate subcmop. - flyoutDialogProps args from args
+    const { flyoutDialogProps, ...flyoutProps } = args;
     
     return (
       <Flyout {...flyoutProps}>
@@ -81,7 +81,7 @@ export const Default: Story = {
             if (!context) return null;
             const { closeFlyout } = context;
             return (
-              <FlyoutDialog {...flyoutDialog}>
+              <FlyoutDialog {...flyoutDialogProps}>
                 <section className='c-flyout__header'>
                   <button type='button' className='c-flyout__header-close' aria-label='close' onClick={closeFlyout} ></button>
                   <h2 className='c-flyout__header-title' id={args.flyoutId + '-title'}>Sample Flyout</h2>
