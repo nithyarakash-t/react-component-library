@@ -1,5 +1,5 @@
-import { ReactNode, useContext, useEffect, useRef, useState } from 'react';
-import { ModalContext  } from './ModalContext';
+import { Children, cloneElement, isValidElement, ReactElement, ReactNode, useContext, useEffect, useRef, useState } from 'react';
+import { ModalContext, useModalContext  } from './ModalContext';
 import './Modal.scss';
 import { Button } from '../../elements/button/Button';
 import { setFocusToFirstItem, trapTabKey } from '../../../../assets/scripts/utils/util';
@@ -114,8 +114,32 @@ export function ModalDialog({customClass='', role='dialog', position='fixed', ha
     )
 }
 
-//3- Control - sample
-export function ModalControl() {
+
+//3- Control
+export function ModalControl({children}:{children:ReactNode}) {
+    const modalContext = useModalContext();
+    if (!modalContext) {
+        throw new Error('ModalControl must be used within a Modal component');
+    }
+    const { modalId, isOpen, openDialog } = modalContext;
+
+    return (
+        Children.map(children, (child)=>{
+            if(isValidElement(child)) {
+                return cloneElement(child as ReactElement, {
+                    "aria-controls": modalId,
+                    "aria-expanded": isOpen,
+                    "onClick": openDialog
+                })
+            }
+           return child;
+        })
+    )
+}
+
+
+//3.1 - Control - sample
+export function ModalContrxl() {
     const modalContext = useContext(ModalContext);
     if (!modalContext) {
         throw new Error('ModalControl must be used within a Modal component');

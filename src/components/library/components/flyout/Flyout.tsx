@@ -1,7 +1,6 @@
-import { ReactNode, useContext, useEffect, useRef, useState } from "react";
+import { Children, cloneElement, isValidElement, ReactElement, ReactNode, useContext, useEffect, useRef, useState } from "react";
 import { FlyoutContext, useFlyoutContext } from "./FlyoutContext";
 import './Flyout.scss';
-import { Button } from "../../elements/button/Button";
 import { setFocusToFirstItem, trapTabKey } from '../../../../assets/scripts/utils/util';
 
 //1 - Flyout comp. - wrapper - START
@@ -117,7 +116,7 @@ export function FlyoutDialog({customClass='', role='dialog', position='fixed', a
 }
 
 // 3 - Flyout contol
-export function FlyoutControl() {
+export function FlyoutControl({children}:{children:ReactNode}) {
     const flyoutContext = useFlyoutContext();
     if (!flyoutContext) {
         throw new Error('FlyoutControl must be used within a Flyout component');
@@ -125,7 +124,16 @@ export function FlyoutControl() {
 
    const { flyoutId, isOpen, openFlyout } = flyoutContext;
 
-    return (
-        <Button type='button' aria-controls={flyoutId} aria-expanded={isOpen} onClick={openFlyout}>Open Flyout</Button>
+     return (
+        Children.map(children, (child)=>{
+            if(isValidElement(child)) {
+                return cloneElement(child as ReactElement, {
+                    "aria-controls": flyoutId,
+                    "aria-expanded": isOpen,
+                    "onClick": openFlyout
+                })
+            }
+           return child;
+        })
     )
 }

@@ -7,7 +7,9 @@ export const releaseNotes = [
             "07-05-25 - Added accordion",
             "08-05-25 - Added modal",
             "09-05-25 - Updated modal - added story theme toggle",
-            "10-05-25 - Added flyout, updated modal, added button"
+            "10-05-25 - Added flyout, updated modal, added button",
+            "14-05-25 - Started dropmenu",
+            "15-05-25 - Dropmenu, Flyout, Modal refactor",
         ]
     },
 ]

@@ -74,7 +74,9 @@ export const Default: Story = {
     
     return (
       <Flyout {...flyoutProps}>
-        <FlyoutControl />
+       <FlyoutControl>
+          <Button type='button'>Open Flyout</Button>
+       </FlyoutControl>
 
         <FlyoutContext.Consumer>
           {(context) => {

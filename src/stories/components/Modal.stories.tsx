@@ -74,7 +74,9 @@ export const Default: Story = {
 
     return (
       <Modal {...modalProps}>
-        <ModalControl />
+        <ModalControl>
+            <Button type='button'>Open Modal</Button>
+        </ModalControl>
 
         <ModalContext.Consumer>
           {(context) => {
