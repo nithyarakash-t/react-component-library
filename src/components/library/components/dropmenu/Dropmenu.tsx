@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, KeyboardEvent as ReactKeyboardEvent } from "react";
 import "./Dropmenu.scss";
 /**
  * https://www.a11y-collective.com/blog/mastering-web-accessibility-making-drop-down-menus-user-friendly/
@@ -18,8 +18,13 @@ export interface DropmenuProps {
 export function Dropmenu({id, customClass, placement="bottom-left" , role="menu"}:DropmenuProps) {
     const [isOpen, setIsOpen] = useState(true);
 
+    function handleKeydown(event:ReactKeyboardEvent) {
+        console.log(event);
+        if(event.key === 'Escape') setIsOpen(false);
+    }
+
     return(
-        <div className="c-dropmenu__wrap" data-class={customClass}>
+        <div className="c-dropmenu__wrap" data-class={customClass} onKeyDown={handleKeydown}>
             <label className="sr-only" id={id + "-label"}>Sample label</label>
             <button type="button" className="c-dropmenu__control" role="combobox" aria-haspopup={role}
                 aria-controls={id} aria-expanded={isOpen} aria-labelledby={id + "-label"}
