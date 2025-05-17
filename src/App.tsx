@@ -4,6 +4,7 @@ import { ReleaseNotes } from './components/layout/releasenotes/Releasenotes'
 import { Header } from './components/layout/header/Header'
 import { Footer } from './components/layout/footer/Footer'
 import { ThemeProvider } from './components/layout/themeSwitch/ThemeProvider'
+import { Dropmenu } from './components/library/components/dropmenu/Dropmenu'
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
                 <Route path='/' element={
                   <div className='app-grid'>
                     <p>Filler</p>
+                    <Dropmenu id='dcnldknc'/>
                   </div>
                 }></Route>
                 <Route path='/releasenotes' element={<ReleaseNotes/>}></Route>
