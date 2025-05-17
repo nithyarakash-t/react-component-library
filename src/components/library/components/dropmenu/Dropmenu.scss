@@ -18,7 +18,8 @@
         }
 
         &:hover,
-        &:focus {
+        &:focus-visible,
+        &:focus-within {
             color: inherit;
             background-color: #f4f4f4;
             text-decoration: none;
@@ -37,6 +38,11 @@
         border-radius: var(--_border-radius);
         @supports (min-height: 1dvh) {
             max-height: 60dvh;
+        }
+
+        
+        & [role=option] {
+            cursor: pointer;
         }
     }
     &__container {
