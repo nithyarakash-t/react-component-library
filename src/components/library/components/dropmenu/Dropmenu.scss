@@ -4,6 +4,7 @@
         width: 100%;
         text-align: inherit;
         background-color: transparent;
+        border: none;
         padding: 0.5rem var(--_padding-right) 0.5rem var(--_padding-left);
         gap: 1rem;
         color: inherit;
@@ -66,10 +67,10 @@
             display: block;
         }
 
-        &[data-placement="bottom-left"] {
+        &[data-placement="bottom-start"] {
             inset: 100% auto auto 0;
         }
-        &[data-placement="bottom-right"] {
+        &[data-placement="bottom-end"] {
             inset: 100% 0 auto auto;
         }
     }
@@ -105,5 +106,7 @@
     }
     &__wrap {
         position: relative;
+        width: fit-content;
+        max-width: 100%;
     }
 }

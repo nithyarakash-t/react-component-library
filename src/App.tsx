@@ -4,7 +4,7 @@ import { ReleaseNotes } from './components/layout/releasenotes/Releasenotes'
 import { Header } from './components/layout/header/Header'
 import { Footer } from './components/layout/footer/Footer'
 import { ThemeProvider } from './components/layout/themeSwitch/ThemeProvider'
-import { Dropmenu } from './components/library/components/dropmenu/Dropmenu'
+import { Dropmenu, DropmenuControl, DropmenuMenu } from './components/library/components/dropmenu/Dropmenu'
 import { Accordion, Collapse, CollapseContent, CollapseControl } from './components/library/components/accordion/Accordion'
 import { Modal, ModalControl, ModalDialog } from './components/library/components/modal/Modal'
 import { Button } from './components/library/elements/button/Button'
@@ -25,7 +25,12 @@ function App() {
                   <div className='app-grid'>
                     <p>Filler</p>
                     <div style={{padding: '1rem 0', display: 'grid', gap: '1rem'}}>
-                      <Dropmenu id='dcnldknc'/>
+                      <Dropmenu id='dcnldknc' label="sampdkcmdk">
+                        <DropmenuControl>
+                          <button type='button'>Sample Dropenu</button>
+                        </DropmenuControl>
+                        <DropmenuMenu/>
+                      </Dropmenu>
 
                       <Accordion
                         accordionId="nested-accordion-1"
@@ -82,29 +87,29 @@ function App() {
                           </Button>
                         </ModalControl>
                         <ModalContext.Consumer>
-                                  {(context) => {
-                                            // Alt. from claude - Use non-null assertion to tell TypeScript this won't be undefined
-                                            // const { closeDialog } = context!;
-                        
-                                            if (!context) return null;
-                                            const { closeDialog, modalId } = context;
-                                            return (
-                                              <ModalDialog>
-                                                <section className='c-modal__header'>
-                                                    <button type='button' className='c-modal__header-close' aria-label='close' onClick={closeDialog} ></button>
-                                                    <h2 className='c-modal__header-title' id={modalId + '-title'}>Sample Modal</h2>
-                                                </section>
-                                                <section className='c-modal__body'>
-                                                  Lorem Ipsum
-                                                </section>
-                                                <section className='c-modal__footer'>
-                                                  <Button type='button' aria-label='Cancel' onClick={closeDialog} >Cancel</Button>
-                                                  <Button type='button' aria-label='Submit' onClick={closeDialog} >Submit</Button>
-                                                </section>
-                                            </ModalDialog>
-                                            );
-                                    }}
-                                </ModalContext.Consumer>
+                          {(context) => {
+                                    // Alt. from claude - Use non-null assertion to tell TypeScript this won't be undefined
+                                    // const { closeDialog } = context!;
+                
+                                    if (!context) return null;
+                                    const { closeDialog, modalId } = context;
+                                    return (
+                                      <ModalDialog>
+                                        <section className='c-modal__header'>
+                                            <button type='button' className='c-modal__header-close' aria-label='close' onClick={closeDialog} ></button>
+                                            <h2 className='c-modal__header-title' id={modalId + '-title'}>Sample Modal</h2>
+                                        </section>
+                                        <section className='c-modal__body'>
+                                          Lorem Ipsum
+                                        </section>
+                                        <section className='c-modal__footer'>
+                                          <Button type='button' aria-label='Cancel' onClick={closeDialog} >Cancel</Button>
+                                          <Button type='button' aria-label='Submit' onClick={closeDialog} >Submit</Button>
+                                        </section>
+                                    </ModalDialog>
+                                    );
+                            }}
+                        </ModalContext.Consumer>
                       </Modal>
 
                        <Flyout flyoutId="def-flyout" >
@@ -114,25 +119,25 @@ function App() {
                           </Button>
                         </FlyoutControl>
                         <FlyoutContext.Consumer>
-                                  {(context) => {                        
-                                            if (!context) return null;
-                                            const { closeFlyout, flyoutId } = context;
-                                            return (
-                                              <FlyoutDialog>
-                                                <section className='c-modal__header'>
-                                                    <button type='button' className='c-modal__header-close' aria-label='close' onClick={closeFlyout} ></button>
-                                                    <h2 className='c-modal__header-title' id={flyoutId + '-title'}>Sample Modal</h2>
-                                                </section>
-                                                <section className='c-modal__body'>
-                                                  Lorem Ipsum
-                                                </section>
-                                                <section className='c-modal__footer'>
-                                                  <Button type='button' aria-label='Cancel' onClick={closeFlyout} >Cancel</Button>
-                                                  <Button type='button' aria-label='Submit' onClick={closeFlyout} >Submit</Button>
-                                                </section>
-                                            </FlyoutDialog>
-                                            );
-                                    }}
+                          {(context) => {                        
+                                    if (!context) return null;
+                                    const { closeFlyout, flyoutId } = context;
+                                    return (
+                                      <FlyoutDialog>
+                                        <section className='c-modal__header'>
+                                            <button type='button' className='c-modal__header-close' aria-label='close' onClick={closeFlyout} ></button>
+                                            <h2 className='c-modal__header-title' id={flyoutId + '-title'}>Sample Modal</h2>
+                                        </section>
+                                        <section className='c-modal__body'>
+                                          Lorem Ipsum
+                                        </section>
+                                        <section className='c-modal__footer'>
+                                          <Button type='button' aria-label='Cancel' onClick={closeFlyout} >Cancel</Button>
+                                          <Button type='button' aria-label='Submit' onClick={closeFlyout} >Submit</Button>
+                                        </section>
+                                    </FlyoutDialog>
+                                    );
+                            }}
                           </FlyoutContext.Consumer>
                       </Flyout>
 
