@@ -1,7 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Dropmenu } from '../../components/library/components/dropmenu/Dropmenu';
+import { Dropmenu, DropmenuControl, DropmenuMenu, DropmenuMenuProps, DropmenuProps } from '../../components/library/components/dropmenu/Dropmenu';
+// import { DropmenuContext } from '../../components/library/components/dropmenu/DropmenuContext';
 
-const meta: Meta<typeof Dropmenu> = {
+interface ExtendedDropmenuProps extends DropmenuProps {
+  dropmenuMenuProps?: DropmenuMenuProps
+}
+
+
+const meta: Meta<ExtendedDropmenuProps> = {
   title: 'Components/Dropmenu',
   component: Dropmenu,
   parameters: {
@@ -11,20 +17,42 @@ const meta: Meta<typeof Dropmenu> = {
   argTypes: {
     id: { control: 'text' },
     customClass: { control: 'text' },
+    label: {control: 'text'},
+    // subC
+    dropmenuMenuProps: {
+      placement: {control: 'select'},
+      role: {control: 'select'},
+    }
   },
   args: {
     customClass: '',
-    id: 'def-checkbox',
+    id: 'def-dropmenu',
+    label: 'Sample Action',
+    // subC
+    dropmenuMenuProps : {
+      placement: 'bottom-start',
+      role: 'listbox'
+    }
   },
+  subcomponents: {DropmenuControl, DropmenuMenu}
 };
 
 export default meta;
-type Story = StoryObj<typeof Dropmenu>;
+type Story = StoryObj<ExtendedDropmenuProps>;
 
 export const Default: Story = {
   render: (args) => {
+    
+    // Seperate subC
+    const { dropmenuMenuProps, ...props } = args;
+
     return (
-        <Dropmenu {...args}/>
+        <Dropmenu {...props}>
+          <DropmenuControl>
+            <button type='button'>Sample Dropenu</button>
+          </DropmenuControl>
+          <DropmenuMenu {...dropmenuMenuProps} />
+        </Dropmenu>
     )
   } 
 };
