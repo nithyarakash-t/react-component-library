@@ -60,7 +60,7 @@ export const Default: Story = {
     ...meta.args, // not needed
     modalId: 'def-modal',
     modalDialogProps: {
-        "customClass": "def-flyout",
+        "customClass": "def-modal",
         "position": "fixed",
         "role": "dialog",
         "hasBackdrop": true

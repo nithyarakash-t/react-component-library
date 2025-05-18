@@ -40,7 +40,7 @@ export interface ModalDialogProps {
     hasBackdrop?:boolean;
     children?: ReactNode;
 }
-export function ModalDialog({customClass='', role='dialog', position='fixed', hasBackdrop=false, children, ...props}: ModalDialogProps) {
+export function ModalDialog({customClass='', role='dialog', position='fixed', hasBackdrop=true, children, ...props}: ModalDialogProps) {
     const modalContext = useContext(ModalContext);
     if(!modalContext) {
         throw new Error('ModalDialog should be used within a Modal component');

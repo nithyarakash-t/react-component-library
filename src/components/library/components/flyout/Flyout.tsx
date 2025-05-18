@@ -41,7 +41,7 @@ export interface FlyoutDialogProps {
     alignment?:'right' | 'left' | 'top' | 'bottom';
     children:ReactNode;
 }
-export function FlyoutDialog({customClass='', role='dialog', position='fixed', alignment='right', hasBackdrop=false, children, ...props }:FlyoutDialogProps) {
+export function FlyoutDialog({customClass='', role='dialog', position='fixed', alignment='right', hasBackdrop=true, children, ...props }:FlyoutDialogProps) {
     const flyoutContext = useContext(FlyoutContext);
     if(!flyoutContext) {
         throw new Error("Use flyoutdialog inside a Flyout component");
