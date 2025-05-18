@@ -8,6 +8,8 @@ const config: StorybookConfig = {
   addons: [
     "@storybook/addon-essentials",
     "@storybook/addon-onboarding",
+    "@storybook/addon-themes",
+    "@storybook/addon-viewport",
     "@chromatic-com/storybook",
     "@storybook/experimental-addon-test"
   ],
@@ -18,5 +20,11 @@ const config: StorybookConfig = {
   docs: {
     autodocs: 'tag',
   },
+  typescript: {
+    reactDocgen: 'react-docgen-typescript',
+    check: false,
+  },
+  // pv.tsx as we've renamed it
+  previewAnnotations: ['./.storybook/preview-base.tsx'],
 };
 export default config;

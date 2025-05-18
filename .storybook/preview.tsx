@@ -1,3 +1,5 @@
+// export { default } from './preview-base.tsx';
+
 import type { Preview } from '@storybook/react'
 import '../src/assets/styles/base/_base.scss'
 import React from 'react';
@@ -35,7 +37,13 @@ const preview: Preview = {
       
       document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
       
-      return React.createElement(React.Fragment, null, React.createElement(Story, null));
+      // return React.createElement(React.Fragment, null, React.createElement(Story, null));
+      return (
+        <React.Fragment> 
+          <Story /> 
+        </React.Fragment>
+      )
+      
     }
   ],
 };
@@ -59,3 +67,4 @@ preview.globalTypes = {
 };
 
 export default preview;
+
