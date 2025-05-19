@@ -4,13 +4,14 @@ import { ReleaseNotes } from './components/layout/releasenotes/Releasenotes'
 import { Header } from './components/layout/header/Header'
 import { Footer } from './components/layout/footer/Footer'
 import { ThemeProvider } from './components/layout/themeSwitch/ThemeProvider'
-import { Dropmenu, DropmenuControl, DropmenuMenu } from './components/library/components/dropmenu/Dropmenu'
+import { Dropmenu, DropmenuControl, DropmenuMenu, DropmenuOption } from './components/library/components/dropmenu/Dropmenu'
 import { Accordion, Collapse, CollapseContent, CollapseControl } from './components/library/components/accordion/Accordion'
 import { Modal, ModalControl, ModalDialog } from './components/library/components/modal/Modal'
 import { Button } from './components/library/elements/button/Button'
 import { ModalContext } from './components/library/components/modal/ModalContext'
 import { Flyout, FlyoutControl, FlyoutDialog } from './components/library/components/flyout/Flyout'
 import { FlyoutContext } from './components/library/components/flyout/FlyoutContext'
+import { TEST_OPTIONS } from './components/library/components/dropmenu/dump/testOptions'
 
 function App() {
 
@@ -29,7 +30,17 @@ function App() {
                         <DropmenuControl>
                           <button type='button'>Sample Dropenu</button>
                         </DropmenuControl>
-                        <DropmenuMenu/>
+                        <DropmenuMenu>
+                          {TEST_OPTIONS.map((option, index)=>{
+                              return (
+                                <DropmenuOption key={"djfnrkl" + index} >
+                                    <button role="option" className="c-dropmenu__item" id={"dcnldknc" + "-option-" + index} >
+                                      {option}
+                                  </button>
+                                </DropmenuOption>
+                              )
+                          })}
+                        </DropmenuMenu>
                       </Dropmenu>
 
                       <Accordion

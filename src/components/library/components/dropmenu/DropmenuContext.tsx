@@ -11,7 +11,9 @@ export interface DropmenuContextType {
     setIsOpen:React.Dispatch<React.SetStateAction<boolean>>,
     openDropmenu:()=>void,
     closeDropmenu:(flag?:boolean)=>void,
-    toggleDropmenu:()=>void
+    toggleDropmenu:()=>void,
+    registerOption: (el: HTMLElement | null) => number,
+    unregisterOption: (el: HTMLElement | null) => void
 }
 export const DropmenuContext = createContext<DropmenuContextType | undefined>(undefined);
 

@@ -1,11 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Dropmenu, DropmenuControl, DropmenuMenu, DropmenuMenuProps, DropmenuProps } from '../../components/library/components/dropmenu/Dropmenu';
+import { Dropmenu, DropmenuControl, DropmenuMenu, DropmenuMenuProps, DropmenuOption, DropmenuProps } from '../../components/library/components/dropmenu/Dropmenu';
+import { TEST_OPTIONS } from '../../components/library/components/dropmenu/dump/testOptions';
+import { ReactNode } from 'react';
 // import { DropmenuContext } from '../../components/library/components/dropmenu/DropmenuContext';
 
-interface ExtendedDropmenuProps extends DropmenuProps {
-  dropmenuMenuProps?: DropmenuMenuProps
+interface StoryDropmenuMenuProps extends Omit<DropmenuMenuProps, 'children'> {
+  children?: ReactNode; // children is mandatory in props, we want to make it optional
 }
-
+interface ExtendedDropmenuProps extends DropmenuProps {
+  dropmenuMenuProps?: StoryDropmenuMenuProps
+}
 
 const meta: Meta<ExtendedDropmenuProps> = {
   title: 'Components/Dropmenu',
@@ -34,7 +38,7 @@ const meta: Meta<ExtendedDropmenuProps> = {
       role: 'listbox'
     }
   },
-  subcomponents: {DropmenuControl, DropmenuMenu}
+  subcomponents: {DropmenuControl, DropmenuMenu, DropmenuOption}
 };
 
 export default meta;
@@ -51,7 +55,17 @@ export const Default: Story = {
           <DropmenuControl>
             <button type='button'>Sample Dropenu</button>
           </DropmenuControl>
-          <DropmenuMenu {...dropmenuMenuProps} />
+          <DropmenuMenu {...dropmenuMenuProps}>
+            {TEST_OPTIONS.map((option, index)=>{
+              return (
+                <DropmenuOption key={"djfnrkl" + index} >
+                    <button role="option" className="c-dropmenu__item" id={"dcnldknc" + "-option-" + index} >
+                      {option}
+                  </button>
+                </DropmenuOption>
+              )
+          })}
+          </DropmenuMenu>
         </Dropmenu>
     )
   } 
