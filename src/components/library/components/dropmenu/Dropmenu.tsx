@@ -1,4 +1,4 @@
-import { useState, KeyboardEvent as ReactKeyboardEvent, useRef, useEffect, useContext, Children, isValidElement, ReactElement, cloneElement, ReactNode, Fragment, useCallback } from "react";
+import React, { useState, KeyboardEvent as ReactKeyboardEvent, useRef, useEffect, useContext, Children, isValidElement, ReactElement, cloneElement, ReactNode, Fragment, useCallback } from "react";
 import "./Dropmenu.scss";
 import { DropmenuContext } from "./DropmenuContext";
 /**
@@ -19,6 +19,11 @@ import { DropmenuContext } from "./DropmenuContext";
  *              -- because this is expected to be handled via common click for mouse, enter and touch 
 */
 
+/**
+ * Check and update
+ * https://www.freecodecamp.org/news/build-a-dynamic-dropdown-component/
+ * https://blog.logrocket.com/customize-reusable-react-dropdown-menu-component/
+ */
 
 // 1. Dropmenu
 export interface DropmenuProps {
@@ -39,6 +44,7 @@ export function Dropmenu({id, customClass, label='', children}:DropmenuProps) {
     /** 1 - Effects */
     // Set up refs for options
     useEffect(()=>{
+        console.log(activeIndex, optionRefs)
         if(activeIndex !== null) {
             optionRefs.current[activeIndex]?.focus({focusVisible:true} as FocusOptions);
         }
@@ -138,28 +144,51 @@ export function Dropmenu({id, customClass, label='', children}:DropmenuProps) {
         if (el) {
             const index = optionRefs.current.findIndex(ref => ref === el);
             if (index !== -1) {
-                // Remove the element
                 optionRefs.current.splice(index, 1);
                 
-                // Update activeIndex using a functional update to avoid closure issues
+                // Use functional update to safely access the current activeIndex
                 setActiveIndex(prevActiveIndex => {
                     if (prevActiveIndex === null) return null;
                     
                     if (index === prevActiveIndex) {
-                        // The active element was removed, choose a new active element
+                        // The active element was removed
                         return optionRefs.current.length > 0 ? 
                             Math.min(prevActiveIndex, optionRefs.current.length - 1) : null;
                     } else if (index < prevActiveIndex) {
-                        // An element before the active element was removed, shift index down
+                        // An element before active element was removed
                         return prevActiveIndex - 1;
                     }
-                    
-                    // Otherwise, leave activeIndex unchanged
                     return prevActiveIndex;
                 });
             }
         }
     }, []);
+    // const unregisterOption = useCallback((el: HTMLElement | null): void => {
+    //     if (el) {
+    //         const index = optionRefs.current.findIndex(ref => ref === el);
+    //         if (index !== -1) {
+    //             // Remove the element
+    //             optionRefs.current.splice(index, 1);
+                
+    //             // Update activeIndex using a functional update to avoid closure issues
+    //             setActiveIndex(prevActiveIndex => {
+    //                 if (prevActiveIndex === null) return null;
+                    
+    //                 if (index === prevActiveIndex) {
+    //                     // The active element was removed, choose a new active element
+    //                     return optionRefs.current.length > 0 ? 
+    //                         Math.min(prevActiveIndex, optionRefs.current.length - 1) : null;
+    //                 } else if (index < prevActiveIndex) {
+    //                     // An element before the active element was removed, shift index down
+    //                     return prevActiveIndex - 1;
+    //                 }
+                    
+    //                 // Otherwise, leave activeIndex unchanged
+    //                 return prevActiveIndex;
+    //             });
+    //         }
+    //     }
+    // }, []);
     // const unregisterOption = useCallback((el: HTMLElement | null): void => {
     //     if (el) {
     //         const index = optionRefs.current.findIndex(ref => ref === el);
@@ -257,7 +286,7 @@ export interface DropmenuOptionProps {
     children:ReactNode
     // optionRole?: "listitem" | "menuitem" | "menuitemcheckbox" | "menuitemradio" | "option" | "treeitem"
 }
-export function DropmenuOption({children}:DropmenuOptionProps) {
+export const DropmenuOption = ({children}:DropmenuOptionProps) =>{
 
     const CONTEXT = useContext(DropmenuContext);
     if(!CONTEXT) throw new Error('Use dropmenu option within Dropmenu Context');
@@ -292,17 +321,26 @@ export function DropmenuOption({children}:DropmenuOptionProps) {
     }
 
     // 2 - 
-    const {registerOption, closeDropmenu} = CONTEXT;
+    const {registerOption, closeDropmenu} = CONTEXT; //, unregisterOption
 
     // Register / Unregister
     const elementRef = useRef<HTMLElement | null>(null); // If we directly use optionRef.current in cleanup - The ref value 'optionRef.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'optionRef.current' to a variable inside the effect, and use that variable in the cleanup function
+    const unmountingRef = useRef(false);
+
     const setOptionRef = useCallback((el: HTMLElement | null) => {
         elementRef.current = el;
         if (el) registerOption(el);
     }, [registerOption]);
+    // Set flag on true unmount
+    useEffect(() => {
+        return () => {
+            unmountingRef.current = true;
+        };
+    }, []);
+    // Only unregister if truly unmounting
     // useEffect(() => {
     //     return () => {
-    //         if (elementRef.current) {
+    //         if (unmountingRef.current && elementRef.current) {
     //             unregisterOption(elementRef.current);
     //         }
     //     };
@@ -330,7 +368,27 @@ export function DropmenuOption({children}:DropmenuOptionProps) {
 
 
 
+/***
+ * Explore if reducer is a viable option
+ * const [state, dispatch] = useReducer(dropdownReducer, {
+    isOpen: false,
+    activeIndex: null,
+    options: []
+});
 
+function dropdownReducer(state, action) {
+    switch(action.type) {
+        case 'OPEN_MENU':
+            return {...state, isOpen: true};
+        case 'CLOSE_MENU':
+            return {...state, isOpen: false, activeIndex: null};
+        case 'SET_ACTIVE_INDEX':
+            return {...state, activeIndex: action.index};
+        default:
+            return state;
+    }
+}
+ */
 
 /**
  * 
