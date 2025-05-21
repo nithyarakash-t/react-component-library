@@ -1,8 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { 
   Collapse,
-  CollapseControl,
-  CollapseContent ,
   Accordion
 } from '../../components/library/components/accordion/Accordion';
 
@@ -21,7 +19,7 @@ const meta: Meta<typeof Accordion> = {
     customClass: 'example-accordion'
   },
   // Add subcomponents so they appear in the docs
-  subcomponents: { Collapse, CollapseControl, CollapseContent },
+  subcomponents: { Collapse, CollapseControl : Collapse.Control, CollapseContent:Collapse.Content  },
 };
 
 export default meta;
@@ -36,20 +34,20 @@ export const Default: Story = {
     return (
      <Accordion {...args}>
          <Collapse customClass='acc-child-collapse' collapseId='acc-child-1' open={true}>
-            <CollapseControl>
+            <Collapse.Control>
                 Collapse 1
-            </CollapseControl>
-            <CollapseContent>
+            </Collapse.Control>
+            <Collapse.Content>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
-            </CollapseContent>
+            </Collapse.Content>
         </Collapse>
         <Collapse customClass='acc-child-collapse' collapseId='acc-child-2' open={false}>
-            <CollapseControl>
+            <Collapse.Control>
                 Collapse 2
-            </CollapseControl>
-            <CollapseContent>
+            </Collapse.Control>
+            <Collapse.Content>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
-            </CollapseContent>
+            </Collapse.Content>
         </Collapse>
      </Accordion>
     )
@@ -68,31 +66,31 @@ export const Nested: Story = {
     return (
      <Accordion {...args}>
          <Collapse customClass='acc-child-collapse' collapseId='acc-nchild-1' open={false}>
-            <CollapseControl>
+            <Collapse.Control>
                 Collapse 1
-            </CollapseControl>
-            <CollapseContent>
+            </Collapse.Control>
+            <Collapse.Content>
               <div style={{paddingLeft: '3rem'}}>
                 <Accordion accordionId='nested-accordion-1-1'>
                   <Collapse customClass='acc-child-collapse-nested' collapseId='acc-nchild-1-1' open={true}>
-                    <CollapseControl>
+                    <Collapse.Control>
                         Collapse 1-1
-                    </CollapseControl>
-                    <CollapseContent>
+                    </Collapse.Control>
+                    <Collapse.Content>
                         Inner Child
-                    </CollapseContent>
+                    </Collapse.Content>
                   </Collapse>
                 </Accordion>
               </div>
-            </CollapseContent>
+            </Collapse.Content>
         </Collapse>
         <Collapse customClass='acc-child-collapse' collapseId='acc-nchild-2' open={true}>
-            <CollapseControl>
+            <Collapse.Control>
                 Collapse 2
-            </CollapseControl>
-            <CollapseContent>
+            </Collapse.Control>
+            <Collapse.Content>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
-            </CollapseContent>
+            </Collapse.Content>
         </Collapse>
      </Accordion>
     )

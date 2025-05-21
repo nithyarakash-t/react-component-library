@@ -1,19 +1,19 @@
 import { useState, createContext, useContext, ReactNode, Children, cloneElement, ReactElement, isValidElement, useEffect, useRef } from 'react';
 import './Accordion.scss';
 
-/***Accordion***/
+// 1 - Accordion
 interface AccordionContextType {
     accordionId:string;
     activeCollapseId: string | null;
     setActiveCollapseId: (id: string | null) => void;
 }
 const AccordionContext = createContext<AccordionContextType | undefined>(undefined);
-export interface AccordionProps {
+interface AccordionProps {
     accordionId:string;
     customClass?: string;
     children?: ReactNode;
 }
-export function Accordion({ accordionId, customClass, children, ...props }: AccordionProps) {
+function Accordion({ accordionId, customClass, children, ...props }: AccordionProps) {
     const [activeCollapseId, setActiveCollapseId] = useState<string | null>(null);
 
     return (
@@ -32,20 +32,20 @@ export function Accordion({ accordionId, customClass, children, ...props }: Acco
     );
 }
 
-/***Collapse***/
+// 2 - Collapse
 interface CollapseContextType {
     collapseId: string;
     isOpen: boolean;
     toggleCollapse: () => void;
 }
 const CollapseContext = createContext<CollapseContextType | undefined>(undefined);
-export interface CollapseProps {
+interface CollapseProps {
     customClass?: string;
     collapseId: string;
     open?: boolean;
     children: ReactNode;
 }
-export function Collapse({ customClass, collapseId, open = false, children, ...props }: CollapseProps) {
+function Collapse({ customClass, collapseId, open = false, children, ...props }: CollapseProps) {
     const [localIsOpen, setLocalIsOpen] = useState(open);
     const accordionContext = useContext(AccordionContext);
     const isInAccordion = !!accordionContext;
@@ -101,10 +101,11 @@ export function Collapse({ customClass, collapseId, open = false, children, ...p
     );
 }
 
-export interface CollapseControlProps {
+// 2.2 - Control
+interface CollapseControlProps {
     children: ReactNode;
 }
-export function CollapseControl({ children, ...props }: CollapseControlProps) {
+function CollapseControl({ children, ...props }: CollapseControlProps) {
     const context = useContext(CollapseContext);
     
     if (!context) {
@@ -126,10 +127,11 @@ export function CollapseControl({ children, ...props }: CollapseControlProps) {
     );
 }
 
-export interface CollapseContentProps {
+// 2.3 - Content
+interface CollapseContentProps {
     children: ReactNode;
 }
-export function CollapseContent({ children, ...props }: CollapseContentProps) {
+function CollapseContent({ children, ...props }: CollapseContentProps) {
     const context = useContext(CollapseContext);
     
     if (!context) {
@@ -147,4 +149,21 @@ export function CollapseContent({ children, ...props }: CollapseContentProps) {
             </div>
         </div>
     );
+}
+
+// 3 - Assignments
+Collapse.Control = CollapseControl;
+Collapse.Content = CollapseContent;
+Collapse.displayName = "Collapse";
+CollapseControl.displayName = "CollapseControl";
+CollapseContent.displayName = "CollapseContent";
+
+// 4 - Exports
+export {
+    Accordion,
+    Collapse,
+};
+export type {
+    AccordionProps,
+    CollapseProps
 }

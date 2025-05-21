@@ -4,12 +4,12 @@ import './Flyout.scss';
 import { setFocusToFirstItem, trapTabKey } from '../../../../assets/scripts/utils/util';
 
 //1 - Flyout comp. - wrapper - START
-export interface FlyoutProps {
+interface FlyoutProps {
     flyoutId:string;
     open?:boolean;
     children:ReactNode;
 }
-export function Flyout({flyoutId='', open=false, children}:FlyoutProps) {
+function Flyout({flyoutId='', open=false, children}:FlyoutProps) {
 
     const [isOpen, setIsOpen] = useState(open); //state to open/close
 
@@ -33,7 +33,7 @@ export function Flyout({flyoutId='', open=false, children}:FlyoutProps) {
 }
 
 //2 - Flyout comp. - dialog - START
-export interface FlyoutDialogProps {
+interface FlyoutDialogProps {
     role?:'dialog' | 'alertdialog';
     customClass?:string;
     position?: 'absolute' | 'fixed';
@@ -41,7 +41,7 @@ export interface FlyoutDialogProps {
     alignment?:'right' | 'left' | 'top' | 'bottom';
     children:ReactNode;
 }
-export function FlyoutDialog({customClass='', role='dialog', position='fixed', alignment='right', hasBackdrop=true, children, ...props }:FlyoutDialogProps) {
+function FlyoutDialog({customClass='', role='dialog', position='fixed', alignment='right', hasBackdrop=true, children, ...props }:FlyoutDialogProps) {
     const flyoutContext = useContext(FlyoutContext);
     if(!flyoutContext) {
         throw new Error("Use flyoutdialog inside a Flyout component");
@@ -116,7 +116,7 @@ export function FlyoutDialog({customClass='', role='dialog', position='fixed', a
 }
 
 // 3 - Flyout contol
-export function FlyoutControl({children}:{children:ReactNode}) {
+function FlyoutControl({children}:{children:ReactNode}) {
     const flyoutContext = useFlyoutContext();
     if (!flyoutContext) {
         throw new Error('FlyoutControl must be used within a Flyout component');
@@ -136,4 +136,20 @@ export function FlyoutControl({children}:{children:ReactNode}) {
            return child;
         })
     )
+}
+
+// 4- Assignments
+Flyout.Dialog = FlyoutDialog;
+Flyout.Control = FlyoutControl;
+Flyout.displayName = "Flyout";
+FlyoutDialog.displayName = "Flyout.Dialog";
+FlyoutControl.displayName = "Flyout.Control";
+
+// 5 - Exports
+export {
+    Flyout
+}
+export type {
+    FlyoutProps,
+    FlyoutDialogProps
 }

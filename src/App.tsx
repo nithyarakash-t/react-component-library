@@ -5,11 +5,11 @@ import { Header } from './components/layout/header/Header'
 import { Footer } from './components/layout/footer/Footer'
 import { ThemeProvider } from './components/layout/themeSwitch/ThemeProvider'
 import { Dropmenu } from './components/library/components/dropmenu/Dropmenu'
-import { Accordion, Collapse, CollapseContent, CollapseControl } from './components/library/components/accordion/Accordion'
-import { Modal, ModalControl, ModalDialog } from './components/library/components/modal/Modal'
+import { Accordion, Collapse} from './components/library/components/accordion/Accordion'
+import { Modal} from './components/library/components/modal/Modal'
 import { Button } from './components/library/elements/button/Button'
 import { ModalContext } from './components/library/components/modal/ModalContext'
-import { Flyout, FlyoutControl, FlyoutDialog } from './components/library/components/flyout/Flyout'
+import { Flyout} from './components/library/components/flyout/Flyout'
 import { FlyoutContext } from './components/library/components/flyout/FlyoutContext'
 import { TEST_OPTIONS } from './components/library/components/dropmenu/dump/testOptions'
 
@@ -51,10 +51,10 @@ function App() {
                           collapseId="acc-nchild-1"
                           customClass="acc-child-collapse"
                         >
-                          <CollapseControl>
+                          <Collapse.Control>
                             Collapse 1
-                          </CollapseControl>
-                          <CollapseContent>
+                          </Collapse.Control>
+                          <Collapse.Content>
                             <div
                               style={{
                                 paddingLeft: '3rem'
@@ -66,37 +66,37 @@ function App() {
                                   customClass="acc-child-collapse-nested"
                                   open
                                 >
-                                  <CollapseControl>
+                                  <Collapse.Control>
                                     Collapse 1-1
-                                  </CollapseControl>
-                                  <CollapseContent>
+                                  </Collapse.Control>
+                                  <Collapse.Content>
                                     Inner Child
-                                  </CollapseContent>
+                                  </Collapse.Content>
                                 </Collapse>
                               </Accordion>
                             </div>
-                          </CollapseContent>
+                          </Collapse.Content>
                         </Collapse>
                         <Collapse
                           collapseId="acc-nchild-2"
                           customClass="acc-child-collapse"
                           open
                         >
-                          <CollapseControl>
+                          <Collapse.Control>
                             Collapse 2
-                          </CollapseControl>
-                          <CollapseContent>
+                          </Collapse.Control>
+                          <Collapse.Content>
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
-                          </CollapseContent>
+                          </Collapse.Content>
                         </Collapse>
                       </Accordion>
                       
                       <Modal modalId="def-modal" >
-                        <ModalControl>
+                        <Modal.Control>
                           <Button type="button">
                             Open Modal
                           </Button>
-                        </ModalControl>
+                        </Modal.Control>
                         <ModalContext.Consumer>
                           {(context) => {
                                     // Alt. from claude - Use non-null assertion to tell TypeScript this won't be undefined
@@ -105,7 +105,7 @@ function App() {
                                     if (!context) return null;
                                     const { closeDialog, modalId } = context;
                                     return (
-                                      <ModalDialog>
+                                      <Modal.Dialog>
                                         <section className='c-modal__header'>
                                             <button type='button' className='c-modal__header-close' aria-label='close' onClick={closeDialog} ></button>
                                             <h2 className='c-modal__header-title' id={modalId + '-title'}>Sample Modal</h2>
@@ -117,24 +117,24 @@ function App() {
                                           <Button type='button' aria-label='Cancel' onClick={closeDialog} >Cancel</Button>
                                           <Button type='button' aria-label='Submit' onClick={closeDialog} >Submit</Button>
                                         </section>
-                                    </ModalDialog>
+                                    </Modal.Dialog>
                                     );
                             }}
                         </ModalContext.Consumer>
                       </Modal>
 
                        <Flyout flyoutId="def-flyout" >
-                        <FlyoutControl>
+                        <Flyout.Control>
                           <Button type="button">
                             Open Flyout
                           </Button>
-                        </FlyoutControl>
+                        </Flyout.Control>
                         <FlyoutContext.Consumer>
                           {(context) => {                        
                                     if (!context) return null;
                                     const { closeFlyout, flyoutId } = context;
                                     return (
-                                      <FlyoutDialog>
+                                      <Flyout.Dialog>
                                         <section className='c-modal__header'>
                                             <button type='button' className='c-modal__header-close' aria-label='close' onClick={closeFlyout} ></button>
                                             <h2 className='c-modal__header-title' id={flyoutId + '-title'}>Sample Modal</h2>
@@ -146,7 +146,7 @@ function App() {
                                           <Button type='button' aria-label='Cancel' onClick={closeFlyout} >Cancel</Button>
                                           <Button type='button' aria-label='Submit' onClick={closeFlyout} >Submit</Button>
                                         </section>
-                                    </FlyoutDialog>
+                                    </Flyout.Dialog>
                                     );
                             }}
                           </FlyoutContext.Consumer>

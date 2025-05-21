@@ -1,16 +1,16 @@
 import { Children, cloneElement, isValidElement, ReactElement, ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import { ModalContext, useModalContext  } from './ModalContext';
 import './Modal.scss';
-import { Button } from '../../elements/button/Button';
+// import { Button } from '../../elements/button/Button';
 import { setFocusToFirstItem, trapTabKey } from '../../../../assets/scripts/utils/util';
 
 //1 - Modal
-export interface ModalProps {
+interface ModalProps {
     modalId: string;
     open?: boolean;
     children?: ReactNode;
 }
-export function Modal({modalId, open=false, children}: ModalProps) {
+function Modal({modalId, open=false, children}: ModalProps) {
     const [isOpen, setIsOpen] = useState(open);
 
     // Modal fns. - start
@@ -33,14 +33,14 @@ export function Modal({modalId, open=false, children}: ModalProps) {
 }
 
 //2 - Modal dialog
-export interface ModalDialogProps {
+interface ModalDialogProps {
     role?:'dialog' | 'alertdialog';
     customClass?:string;
     position?: 'absolute' | 'fixed';
     hasBackdrop?:boolean;
     children?: ReactNode;
 }
-export function ModalDialog({customClass='', role='dialog', position='fixed', hasBackdrop=true, children, ...props}: ModalDialogProps) {
+function ModalDialog({customClass='', role='dialog', position='fixed', hasBackdrop=true, children, ...props}: ModalDialogProps) {
     const modalContext = useContext(ModalContext);
     if(!modalContext) {
         throw new Error('ModalDialog should be used within a Modal component');
@@ -114,9 +114,8 @@ export function ModalDialog({customClass='', role='dialog', position='fixed', ha
     )
 }
 
-
 //3- Control
-export function ModalControl({children}:{children:ReactNode}) {
+function ModalControl({children}:{children:ReactNode}) {
     const modalContext = useModalContext();
     if (!modalContext) {
         throw new Error('ModalControl must be used within a Modal component');
@@ -136,17 +135,31 @@ export function ModalControl({children}:{children:ReactNode}) {
         })
     )
 }
-
-
 //3.1 - Control - sample
-export function ModalContrxl() {
-    const modalContext = useContext(ModalContext);
-    if (!modalContext) {
-        throw new Error('ModalControl must be used within a Modal component');
-    }
-    const { modalId, isOpen, openDialog } = modalContext;
+// function ModalContrxl() {
+//     const modalContext = useContext(ModalContext);
+//     if (!modalContext) {
+//         throw new Error('ModalControl must be used within a Modal component');
+//     }
+//     const { modalId, isOpen, openDialog } = modalContext;
 
-    return (
-        <Button type='button' aria-controls={modalId} aria-expanded={isOpen} onClick={openDialog}>Open Modal</Button>
-    )
+//     return (
+//         <Button type='button' aria-controls={modalId} aria-expanded={isOpen} onClick={openDialog}>Open Modal</Button>
+//     )
+// }
+
+// 4- Assignments
+Modal.Dialog = ModalDialog;
+Modal.Control = ModalControl;
+Modal.displayName = "Modal";
+ModalDialog.displayName = "Modal.Dialog";
+ModalControl.displayName = "Modal.Control";
+
+// 5 - Exports
+export {
+    Modal
+}
+export type {
+    ModalProps,
+    ModalDialogProps
 }

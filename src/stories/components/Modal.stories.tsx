@@ -1,8 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { 
-  Modal, 
-  ModalControl,
-  ModalDialog,
+  Modal,
   ModalProps
 } from '../../components/library/components/modal/Modal';
 import { ModalContext } from '../../components/library/components/modal/ModalContext';
@@ -49,7 +47,7 @@ const meta: Meta<ExtendedModalProps> = {
       hasBackdrop: true
     },
   },
-  subcomponents: {ModalControl, ModalDialog, Button}
+  subcomponents: {ModalControl:Modal.Control, ModalDialog: Modal.Dialog, Button}
 };
 
 export default meta;
@@ -74,9 +72,9 @@ export const Default: Story = {
 
     return (
       <Modal {...modalProps}>
-        <ModalControl>
+        <Modal.Control>
             <Button type='button'>Open Modal</Button>
-        </ModalControl>
+        </Modal.Control>
 
         <ModalContext.Consumer>
           {(context) => {
@@ -86,7 +84,7 @@ export const Default: Story = {
                     if (!context) return null;
                     const { closeDialog } = context;
                     return (
-                      <ModalDialog {...modalDialogProps}>
+                      <Modal.Dialog {...modalDialogProps}>
                         <section className='c-modal__header'>
                             <button type='button' className='c-modal__header-close' aria-label='close' onClick={closeDialog} ></button>
                             <h2 className='c-modal__header-title' id={args.modalId + '-title'}>Sample Modal</h2>
@@ -98,7 +96,7 @@ export const Default: Story = {
                           <Button type='button' aria-label='Cancel' onClick={closeDialog} >Cancel</Button>
                           <Button type='button' aria-label='Submit' onClick={closeDialog} >Submit</Button>
                         </section>
-                    </ModalDialog>
+                    </Modal.Dialog>
                     );
             }}
         </ModalContext.Consumer>

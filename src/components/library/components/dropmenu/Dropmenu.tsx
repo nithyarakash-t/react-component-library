@@ -28,13 +28,13 @@ import { autoUpdate, flip, offset as floatingUiOffset, Placement, shift, Strateg
  */
 
 // 1. Dropmenu
-export interface DropmenuProps {
+interface DropmenuProps {
     id:string,
     customClass?:string,
     label:string;
     children:ReactNode;
 }
-export function Dropmenu({id, customClass, label='', children}:DropmenuProps) {
+function Dropmenu({id, customClass, label='', children}:DropmenuProps) {
     const [ isOpen, setIsOpen ] = useState(false);
     const [ activeIndex, setActiveIndex ] = useState<number | null>(null);
 
@@ -217,10 +217,10 @@ export function Dropmenu({id, customClass, label='', children}:DropmenuProps) {
 }
 
 // 2. Dropmenu Control
-export interface DropmenuControlProps {
+interface DropmenuControlProps {
     children:ReactNode
 }
-export function DropmenuControl({children}:DropmenuControlProps) {
+function DropmenuControl({children}:DropmenuControlProps) {
     const CONTEXT = useContext(DropmenuContext);
     if(!CONTEXT) throw new Error('Use dropmenu control within Dropmenu Context');
     
@@ -267,7 +267,7 @@ export function DropmenuControl({children}:DropmenuControlProps) {
 }
 
 // 3. Dropmenu Menu
-export interface DropmenuMenuProps {
+interface DropmenuMenuProps {
     position?:'static' | 'dynamic',
     strategy?:Strategy; // 'absolute' | 'dynamic
     placement?: Placement; //'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'right' | 'right-start' | 'right-end' | 'left' | 'left-start' | 'left-end';
@@ -275,7 +275,7 @@ export interface DropmenuMenuProps {
     offset?:number,
     children:ReactNode;
 }
-export function DropmenuMenu({position="dynamic", strategy="absolute",placement="top-start", role="menu", offset=2, children}:DropmenuMenuProps) {
+function DropmenuMenu({position="dynamic", strategy="absolute",placement="top-start", role="menu", offset=2, children}:DropmenuMenuProps) {
     const CONTEXT = useContext(DropmenuContext);
     if(!CONTEXT) throw new Error('Use dropmenu control within Dropmenu Context');
 
@@ -307,11 +307,12 @@ export function DropmenuMenu({position="dynamic", strategy="absolute",placement=
     )
 }
 
-export interface DropmenuOptionProps {
+// 4. Dropmenu Options (interactive elements tbf that can close the dropmenu when clicked)
+interface DropmenuOptionProps {
     children:ReactNode
     // optionRole?: "listitem" | "menuitem" | "menuitemcheckbox" | "menuitemradio" | "option" | "treeitem"
 }
-export const DropmenuOption = ({children}:DropmenuOptionProps) =>{
+function DropmenuOption({children}:DropmenuOptionProps) {
 
     const CONTEXT = useContext(DropmenuContext);
     if(!CONTEXT) throw new Error('Use dropmenu option within Dropmenu Context');
@@ -390,14 +391,23 @@ export const DropmenuOption = ({children}:DropmenuOptionProps) =>{
     });
 }
 
+// 5. Assignments
 Dropmenu.Menu = DropmenuMenu;
 Dropmenu.Control = DropmenuControl;
 Dropmenu.Option = DropmenuOption;
-
 Dropmenu.displayName = 'Dropmenu';
 DropmenuControl.displayName = 'Dropmenu.Control';
 DropmenuMenu.displayName = 'Dropmenu.Menu';
-DropmenuOption.displayName = 'Dropmenu.Option'
+DropmenuOption.displayName = 'Dropmenu.Option';
+
+// 6. Exports
+export {
+    Dropmenu
+}
+export type {
+    DropmenuProps,
+    DropmenuMenuProps
+}
 
 /***
  * 

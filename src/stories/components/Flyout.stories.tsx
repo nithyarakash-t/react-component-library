@@ -1,8 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { 
-  Flyout, 
-  FlyoutControl,
-  FlyoutDialog
+  Flyout
 } from '../../components/library/components/flyout/Flyout';
 import { FlyoutContext } from '../../components/library/components/flyout/FlyoutContext';
 import { FlyoutProps } from '../../components/library/components/flyout/Flyout';
@@ -48,7 +46,7 @@ const meta: Meta<ExtendedFlyoutProps> = {
       hasBackdrop: true
     },
   },
-  subcomponents: {FlyoutControl, FlyoutDialog, Button}
+  subcomponents: {FlyoutControl: Flyout.Control, FlyoutDialog: Flyout.Dialog, Button}
 };
 
 export default meta;
@@ -74,16 +72,16 @@ export const Default: Story = {
     
     return (
       <Flyout {...flyoutProps}>
-       <FlyoutControl>
+       <Flyout.Control>
           <Button type='button'>Open Flyout</Button>
-       </FlyoutControl>
+       </Flyout.Control>
 
         <FlyoutContext.Consumer>
           {(context) => {
             if (!context) return null;
             const { closeFlyout } = context;
             return (
-              <FlyoutDialog {...flyoutDialogProps}>
+              <Flyout.Dialog {...flyoutDialogProps}>
                 <section className='c-flyout__header'>
                   <button type='button' className='c-flyout__header-close' aria-label='close' onClick={closeFlyout} ></button>
                   <h2 className='c-flyout__header-title' id={args.flyoutId + '-title'}>Sample Flyout</h2>
@@ -95,7 +93,7 @@ export const Default: Story = {
                   <Button type='button' aria-label='Cancel' onClick={closeFlyout} >Cancel</Button>
                   <Button type='button' aria-label='Submit' onClick={closeFlyout} >Submit</Button>
                 </section>
-              </FlyoutDialog>
+              </Flyout.Dialog>
             );
           }}
         </FlyoutContext.Consumer>
