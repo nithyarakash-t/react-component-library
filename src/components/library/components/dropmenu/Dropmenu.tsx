@@ -1,6 +1,7 @@
 import React, { useState, KeyboardEvent as ReactKeyboardEvent, useRef, useEffect, useContext, Children, isValidElement, ReactElement, cloneElement, ReactNode, Fragment, useCallback } from "react";
 import "./Dropmenu.scss";
 import { DropmenuContext } from "./DropmenuContext";
+import { autoUpdate, flip, offset as floatingUiOffset, Placement, shift, Strategy, useFloating } from "@floating-ui/react-dom";
 /**
  * https://www.a11y-collective.com/blog/mastering-web-accessibility-making-drop-down-menus-user-friendly/
  * https://www.w3.org/WAI/ARIA/apg/patterns/combobox/examples/combobox-select-only/
@@ -21,6 +22,7 @@ import { DropmenuContext } from "./DropmenuContext";
 
 /**
  * Check and update
+ * IntersectionObserver, ResizeObserver
  * https://www.freecodecamp.org/news/build-a-dynamic-dropdown-component/
  * https://blog.logrocket.com/customize-reusable-react-dropdown-menu-component/
  */
@@ -52,6 +54,7 @@ export function Dropmenu({id, customClass, label='', children}:DropmenuProps) {
 
     // Effect to handle opn/close
     useEffect(()=>{
+        // CAN THIS BE IN A CALLBACK ?
         function watchClickOutside(event: MouseEvent) {
             if (parentRef.current && (event.target !== parentRef.current) && !parentRef.current.contains(event.target as HTMLElement)) {
                 closeMenu(false);
@@ -262,20 +265,39 @@ export function DropmenuControl({children}:{children:ReactNode}) {
 
 // 3. Dropmenu Menu
 export interface DropmenuMenuProps {
-     // strategy?:'static' | 'dynamic',
-    placement?: "bottom-start" | "bottom-end" //'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'right' | 'right-start' | 'right-end' | 'left' | 'left-start' | 'left-end';
+    position?:'static' | 'dynamic',
+    strategy?:Strategy; // 'absolute' | 'dynamic
+    placement?: Placement; //'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'right' | 'right-start' | 'right-end' | 'left' | 'left-start' | 'left-end';
     role?:"menu" | "dialog" | "listbox" | "true" | "grid" | "tree";
+    offset?:number,
     children:ReactNode;
 }
-export function DropmenuMenu({placement="bottom-start", role="menu", children}:DropmenuMenuProps) {
+export function DropmenuMenu({position="dynamic", strategy="absolute",placement="top-start", role="menu", offset=2, children}:DropmenuMenuProps) {
     const CONTEXT = useContext(DropmenuContext);
     if(!CONTEXT) throw new Error('Use dropmenu control within Dropmenu Context');
 
-    const {menuRef, isOpen, dropmenuId} = CONTEXT;
+    const {menuRef, controlRef, isOpen, dropmenuId} = CONTEXT;
+
+    const { refs, floatingStyles, placement: currentPlacement } = useFloating({
+        placement: placement,
+        strategy: strategy,
+        middleware: [floatingUiOffset(offset), flip(), shift()],
+        whileElementsMounted: autoUpdate,
+    });
+    
+    // Bind external controlRef manually to useFloating
+    useEffect(() => {
+        if (isOpen) {
+            // Update position when menu opens
+            refs.setReference(controlRef.current);
+            refs.setFloating(menuRef.current);
+        }
+    }, [isOpen,refs, controlRef, menuRef]);
 
     return (
-        <div id={dropmenuId} className={"c-dropmenu__container"+`${isOpen ? ' -open' : '' }`} data-placement={placement}>
-            <div ref={menuRef} className="c-dropmenu__menu" role={role} aria-labelledby={dropmenuId + "-label"} >
+        <div ref={menuRef} id={dropmenuId} className={"c-dropmenu__container"+`${isOpen ? ' -open' : '' }`} data-placement={placement} 
+            data-floating-placement={isOpen && position === "dynamic" ? currentPlacement : undefined} style={isOpen && position === "dynamic"  ? floatingStyles : undefined}>
+            <div  className="c-dropmenu__menu" role={role} aria-labelledby={dropmenuId + "-label"} >
                 {children}
             </div>
         </div>
@@ -369,6 +391,8 @@ export const DropmenuOption = ({children}:DropmenuOptionProps) =>{
 
 
 /***
+ * 
+ * DUMP
  * Explore if reducer is a viable option
  * const [state, dispatch] = useReducer(dropdownReducer, {
     isOpen: false,

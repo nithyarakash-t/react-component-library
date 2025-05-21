@@ -30,8 +30,8 @@ function App() {
                         <DropmenuControl>
                           <button type='button'>Sample Dropenu</button>
                         </DropmenuControl>
-                        <DropmenuMenu>
-                          {TEST_OPTIONS.map((option, index)=>{
+                        <DropmenuMenu placement='top-start'>
+                          {[...TEST_OPTIONS, ...TEST_OPTIONS, ...TEST_OPTIONS, ...TEST_OPTIONS].map((option, index)=>{
                               return (
                                 <DropmenuOption key={"djfnrkl" + index} >
                                     <button role="option" className="c-dropmenu__item" id={"dcnldknc" + "-option-" + index} >
