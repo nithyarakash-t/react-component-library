@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
-import './Chckbox.scss';
+import './Radio.scss';
 
-export interface CheckboxProps {
+export interface RadioProps {
     customClass?:string,
     name:string,
     id:string,
@@ -10,11 +10,11 @@ export interface CheckboxProps {
     content?:string
 }
 
-export function Checkbox({customClass, name, id, content, disabled, children, ...props}:CheckboxProps) {
+export function Radio({customClass, name, id, content, disabled, children, ...props}:RadioProps) {
     return (
-        <label className={'o-checkbox' + ` ${customClass}`}>
-            <input type='checkbox' name={name} id={id} 
-                tabIndex={disabled ? -1 : undefined} //not really needed
+        <label className={'o-radio' + ` ${customClass}`}>
+            <input type='radio' name={name} id={id} 
+                tabIndex={disabled ? -1 : undefined}
                 disabled={disabled ? true : undefined} {...props} />
             {content && <span className='content'>{content}</span>}
             {children}

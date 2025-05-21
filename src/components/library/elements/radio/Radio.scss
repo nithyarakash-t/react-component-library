@@ -1,0 +1,17 @@
+.o-radio {
+    > span {
+        display: inline-block;
+        flex: 1;
+    }
+    > input {
+        flex: 0 0 var(--_cb-size);
+        height: var(--_cb-size);
+        width: var(--_cb-size);
+    }
+    & {
+        --_cb-size: 1rem;
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+    }
+}

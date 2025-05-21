@@ -16,14 +16,28 @@
       }
     &__header {
         &-close {
+            display: inline-block;
+            background-color: transparent;
+            padding: 0;
+            border: none;
             height: 1.25rem;
             width: 1.25rem;
-            border: none;
-            padding: 0;
-            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 6 6 18'/%3E%3Cpath d='m6 6 12 12'/%3E%3C/svg%3E")
-              no-repeat center;
-            mask-size: cover;
-            background-color: light-dark(#000, #fff);
+            &::after {
+              content: '';
+              display: inline-block;
+              height: 1.25rem;
+              width: 1.25rem;
+              border: none;
+              padding: 0;
+              mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 6 6 18'/%3E%3Cpath d='m6 6 12 12'/%3E%3C/svg%3E")
+                no-repeat center;
+              mask-size: cover;
+              background-color: light-dark(#000, #fff);
+            }
+
+            &:focus-visible {
+              outline: 1px solid var(--color-default);
+            }
           }
           &-title {
             font-size: 1.25rem;

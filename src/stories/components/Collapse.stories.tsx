@@ -1,8 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { 
-  Collapse,
-  CollapseControl,
-  CollapseContent 
+  Collapse
 } from '../../components/library/components/accordion/Accordion';
 
 const meta: Meta<typeof Collapse> = {
@@ -22,7 +20,7 @@ const meta: Meta<typeof Collapse> = {
     customClass: 'example-collapse'
   },
   // Add subcomponents so they appear in the docs
-  subcomponents: { CollapseControl, CollapseContent },
+  subcomponents: { CollapseControl : Collapse.Control, CollapseContent:Collapse.Content },
 };
 
 export default meta;
@@ -37,12 +35,12 @@ export const Default: Story = {
   render: (args) => {
     return (
       <Collapse {...args}>
-        <CollapseControl>
+        <Collapse.Control>
             Click to Toggle Collapse
-        </CollapseControl>
-        <CollapseContent>
+        </Collapse.Control>
+        <Collapse.Content>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
-        </CollapseContent>
+        </Collapse.Content>
     </Collapse>
     )
   }
