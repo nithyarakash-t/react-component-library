@@ -217,7 +217,10 @@ export function Dropmenu({id, customClass, label='', children}:DropmenuProps) {
 }
 
 // 2. Dropmenu Control
-export function DropmenuControl({children}:{children:ReactNode}) {
+export interface DropmenuControlProps {
+    children:ReactNode
+}
+export function DropmenuControl({children}:DropmenuControlProps) {
     const CONTEXT = useContext(DropmenuContext);
     if(!CONTEXT) throw new Error('Use dropmenu control within Dropmenu Context');
     
@@ -387,8 +390,14 @@ export const DropmenuOption = ({children}:DropmenuOptionProps) =>{
     });
 }
 
+Dropmenu.Menu = DropmenuMenu;
+Dropmenu.Control = DropmenuControl;
+Dropmenu.Option = DropmenuOption;
 
-
+Dropmenu.displayName = 'Dropmenu';
+DropmenuControl.displayName = 'Dropmenu.Control';
+DropmenuMenu.displayName = 'Dropmenu.Menu';
+DropmenuOption.displayName = 'Dropmenu.Option'
 
 /***
  * 

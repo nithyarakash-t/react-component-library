@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Dropmenu, DropmenuControl, DropmenuMenu, DropmenuMenuProps, DropmenuOption, DropmenuProps } from '../../components/library/components/dropmenu/Dropmenu';
+import { Dropmenu, DropmenuMenuProps, DropmenuProps } from '../../components/library/components/dropmenu/Dropmenu';
 import { TEST_OPTIONS } from '../../components/library/components/dropmenu/dump/testOptions';
 import { ReactNode } from 'react';
 // import { DropmenuContext } from '../../components/library/components/dropmenu/DropmenuContext';
@@ -38,8 +38,17 @@ const meta: Meta<ExtendedDropmenuProps> = {
       role: 'listbox'
     }
   },
-  subcomponents: {DropmenuControl, DropmenuMenu, DropmenuOption}
+  subcomponents: {
+    DropmenuControl: Dropmenu.Control, 
+    DropmenuMenu: Dropmenu.Menu,
+    DropmenuOption: Dropmenu.Option 
+  }
 };
+
+//BUG
+/**
+ * On DropmenuControl code doesnt say Dropmenu.Control in storybook
+ */
 
 export default meta;
 type Story = StoryObj<ExtendedDropmenuProps>;
@@ -52,20 +61,20 @@ export const Default: Story = {
 
     return (
         <Dropmenu {...props}>
-          <DropmenuControl>
+          <Dropmenu.Control>
             <button type='button'>Sample Dropenu</button>
-          </DropmenuControl>
-          <DropmenuMenu {...dropmenuMenuProps}>
+          </Dropmenu.Control>
+          <Dropmenu.Menu {...dropmenuMenuProps}>
             {TEST_OPTIONS.map((option, index)=>{
               return (
-                <DropmenuOption key={"djfnrkl" + index} >
+                <Dropmenu.Option key={"djfnrkl" + index} >
                     <button role="option" className="c-dropmenu__item" id={"dcnldknc" + "-option-" + index} >
                       {option}
                   </button>
-                </DropmenuOption>
+                </Dropmenu.Option>
               )
           })}
-          </DropmenuMenu>
+          </Dropmenu.Menu>
         </Dropmenu>
     )
   } 

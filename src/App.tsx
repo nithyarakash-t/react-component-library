@@ -4,7 +4,7 @@ import { ReleaseNotes } from './components/layout/releasenotes/Releasenotes'
 import { Header } from './components/layout/header/Header'
 import { Footer } from './components/layout/footer/Footer'
 import { ThemeProvider } from './components/layout/themeSwitch/ThemeProvider'
-import { Dropmenu, DropmenuControl, DropmenuMenu, DropmenuOption } from './components/library/components/dropmenu/Dropmenu'
+import { Dropmenu } from './components/library/components/dropmenu/Dropmenu'
 import { Accordion, Collapse, CollapseContent, CollapseControl } from './components/library/components/accordion/Accordion'
 import { Modal, ModalControl, ModalDialog } from './components/library/components/modal/Modal'
 import { Button } from './components/library/elements/button/Button'
@@ -27,20 +27,20 @@ function App() {
                     <p>Filler</p>
                     <div style={{padding: '1rem 0', display: 'grid', gap: '1rem'}}>
                       <Dropmenu id='dcnldknc' label="sampdkcmdk">
-                        <DropmenuControl>
+                        <Dropmenu.Control>
                           <button type='button'>Sample Dropenu</button>
-                        </DropmenuControl>
-                        <DropmenuMenu placement='top-start'>
+                        </Dropmenu.Control>
+                        <Dropmenu.Menu placement='top-start'>
                           {[...TEST_OPTIONS, ...TEST_OPTIONS, ...TEST_OPTIONS, ...TEST_OPTIONS].map((option, index)=>{
                               return (
-                                <DropmenuOption key={"djfnrkl" + index} >
+                                <Dropmenu.Option key={"djfnrkl" + index} >
                                     <button role="option" className="c-dropmenu__item" id={"dcnldknc" + "-option-" + index} >
                                       {option}
                                   </button>
-                                </DropmenuOption>
+                                </Dropmenu.Option>
                               )
                           })}
-                        </DropmenuMenu>
+                        </Dropmenu.Menu>
                       </Dropmenu>
 
                       <Accordion
