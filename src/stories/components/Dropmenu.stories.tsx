@@ -16,6 +16,38 @@ const meta: Meta<ExtendedDropmenuProps> = {
   component: Dropmenu,
   parameters: {
     layout: 'centered',
+    subcomponents: {
+        'Dropmenu.Menu': {
+          description: 'Menu subcomponent for Dropmenu',
+          props: {
+            placement: {
+              description: 'Placement of the menu relative to the control',
+              type: { name: 'enum', value: ['top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'right', 'right-start', 'right-end', 'left', 'left-start', 'left-end'] },
+              defaultValue: 'top-start'
+            },
+            role: {
+              description: 'ARIA role for the menu',
+              type: { name: 'enum', value: ['menu', 'dialog', 'listbox', 'grid', 'tree'] },
+              defaultValue: 'menu'
+            },
+            position: {
+              description: 'Positioning strategy - static or dynamic',
+              type: { name: 'enum', value: ['static', 'dynamic'] },
+              defaultValue: 'dynamic'
+            },
+            strategy: {
+              description: 'CSS positioning strategy',
+              type: { name: 'enum', value: ['absolute', 'fixed'] },
+              defaultValue: 'absolute'
+            },
+            offset: {
+              description: 'Offset distance from the control',
+              type: { name: 'number' },
+              defaultValue: 2
+            }
+          }
+        }
+      }
   },
   tags: ['autodocs'],
   argTypes: {
@@ -24,8 +56,27 @@ const meta: Meta<ExtendedDropmenuProps> = {
     label: {control: 'text'},
     // subC
     dropmenuMenuProps: {
-      placement: {control: 'select'},
-      role: {control: 'select'},
+      description: 'Props for the Dropmenu.Menu subcomponent',
+      control: 'object',
+      placement: { 
+        control: 'select',
+        options: ['top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'right', 'right-start', 'right-end', 'left', 'left-start', 'left-end']
+      },
+      role: { 
+        control: 'select',
+        options: ['menu', 'dialog', 'listbox', 'grid', 'tree']
+      },
+      position: {
+        control: 'select',
+        options: ['static', 'dynamic']
+      },
+      strategy: {
+        control: 'select', 
+        options: ['absolute', 'fixed']
+      },
+      offset: {
+        control: 'number'
+      }
     }
   },
   args: {
@@ -35,7 +86,10 @@ const meta: Meta<ExtendedDropmenuProps> = {
     // subC
     dropmenuMenuProps : {
       placement: 'bottom-start',
-      role: 'listbox'
+      role: 'listbox',
+      position: 'dynamic',
+      strategy: 'absolute',
+      offset: 2
     }
   },
   subcomponents: {

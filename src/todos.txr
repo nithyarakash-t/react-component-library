@@ -7,6 +7,7 @@ TODO - Theme switch - proper
        - Context Theme
        - https://storybook.js.org/addons/storybook-addon-themes
        - https://storybook.js.org/addons/@storybook/addon-themes
+TODO - After converting to compound components - we're not even seeing subcomponent props
 
 TODO - [ DOCUMENTATION FOR EVERYTHING ]
 TODO - Storybook UI configuration - refer to nerdy.dev and other such books
