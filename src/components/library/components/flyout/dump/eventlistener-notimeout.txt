@@ -1,0 +1,106 @@
+// Two options to handle animate out
+const handleTransitionEnd = () => {
+        const flyout = (flyoutRef.current as HTMLDialogElement);
+        flyout.close();
+        flyout.removeAttribute('data-closing');
+        document.body.style.removeProperty('overflow');
+    };
+
+    //dialog ui methods - start
+    //useeffect for open/close - is needed ? 
+    useEffect(()=>{
+        const flyout = (flyoutRef.current as HTMLDialogElement);
+
+        if(isOpen) {
+            flyout.showModal();
+            document.body.style.setProperty('overflow', 'hidden');
+            setFocusToFirstItem(flyoutRef.current as HTMLElement);
+        }
+        else if(!isOpen && flyout.open) {
+            // --- animation doesnt work
+            // flyout.close();
+            // document.body.style.removeProperty('overflow');
+
+            //option - 1
+            flyout.addEventListener('transitionend', handleTransitionEnd, { once: true });
+            flyout.setAttribute('data-closing', 'true');
+            // option - 2
+            // setTimeout(handleTransitionEnd, 400);
+        }
+    }, [isOpen])
+
+
+
+/////////////////////////////////////////////
+reduced motion preference
+
+option 1
+useEffect(() => {
+    const flyout = flyoutRef.current as HTMLDialogElement;
+
+    if (isOpen) {
+        flyout.showModal();
+        document.body.style.setProperty('overflow', 'hidden');
+        setFocusToFirstItem(flyout);
+    }
+    else if (!isOpen && flyout.open) {
+        let timeoutId: NodeJS.Timeout;
+        
+        const cleanup = () => {
+            clearTimeout(timeoutId);
+            flyout.removeEventListener('transitionend', handleTransitionEnd);
+        };
+
+        // Primary: Listen for transition end
+        const wrappedHandler = () => {
+            cleanup();
+            handleTransitionEnd();
+        };
+        
+        flyout.addEventListener('transitionend', wrappedHandler, { once: true });
+        flyout.setAttribute('data-closing', 'true');
+        
+        // Fallback: Always set a timeout (even if transitions work)
+        timeoutId = setTimeout(() => {
+            cleanup();
+            handleTransitionEnd();
+        }, 50); // Short timeout for no-animation case
+        
+        return cleanup;
+    }
+}, [isOpen]);
+
+option 2
+const handleTransitionEnd = useCallback(() => {
+    const flyout = flyoutRef.current as HTMLDialogElement;
+    flyout.close();
+    flyout.removeAttribute('data-closing');
+    document.body.style.removeProperty('overflow');
+}, []);
+
+useEffect(() => {
+    const flyout = flyoutRef.current as HTMLDialogElement;
+
+    if (isOpen) {
+        flyout.showModal();
+        document.body.style.setProperty('overflow', 'hidden');
+        setFocusToFirstItem(flyout);
+    }
+    else if (!isOpen && flyout.open) {
+        flyout.setAttribute('data-closing', 'true');
+        
+        // Check if user prefers reduced motion
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        
+        if (prefersReducedMotion) {
+            // No animation - close immediately
+            setTimeout(handleTransitionEnd, 0);
+        } else {
+            // Normal animation - wait for transition
+            flyout.addEventListener('transitionend', handleTransitionEnd, { once: true });
+            
+            // Still add fallback in case transition fails
+            setTimeout(handleTransitionEnd, 500);
+        }
+    }
+}, [isOpen, handleTransitionEnd]);

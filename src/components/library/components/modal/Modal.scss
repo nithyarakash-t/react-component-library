@@ -64,7 +64,7 @@
         max-height: var(--_max-height);
     }
     &__wrap {
-        --_transition-duration: .3s;
+        --_transition-duration: 3s;
         --_width: min(40rem, 60vw);
         --_max-height: 80vh;
         --_padding-h: 2rem;
@@ -88,12 +88,21 @@
           transition: opacity var(--_transition-duration) allow-discrete ease;
         }
 
+        //OPEN
         &:where(&[open], &:open) {
           opacity: 1;
           &::backdrop {
             @starting-style {
               opacity: 0;
             }
+          }
+        }
+
+        // CLOSING - Exit animation
+        &[data-closing="true"] {
+           opacity: 0;
+          &::backdrop {
+            opacity: 0;
           }
         }
 

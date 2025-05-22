@@ -49,24 +49,43 @@ function FlyoutDialog({customClass='', role='dialog', position='fixed', alignmen
 
     const flyoutRef = useRef<HTMLDialogElement>(null);
     const {isOpen, closeFlyout, flyoutId} = flyoutContext;
+    const handleTransitionEnd = () => {
+        const flyout = (flyoutRef.current as HTMLDialogElement);
+        flyout.close();
+        flyout.removeAttribute('data-closing');
+        document.body.style.removeProperty('overflow');
+    };
 
     //dialog ui methods - start
-    //useeffect for open/close
+    //useeffect for open/close - is needed ? 
     useEffect(()=>{
+        const flyout = (flyoutRef.current as HTMLDialogElement);
+
         if(isOpen) {
-            flyoutRef.current?.showModal();
+            flyout.showModal();
             document.body.style.setProperty('overflow', 'hidden');
             setFocusToFirstItem(flyoutRef.current as HTMLElement);
         }
-        else {
-            flyoutRef.current?.close();
-            document.body.style.removeProperty('overflow');
+        else if(!isOpen && flyout.open) {
+            // --- animation doesnt work
+            // flyout.close();
+            // document.body.style.removeProperty('overflow');
+
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if( ! prefersReducedMotion) { //option - 1
+                flyout.addEventListener('transitionend', handleTransitionEnd, { once: true });
+                flyout.setAttribute('data-closing', 'true');
+            }
+            else { // option - 2
+                flyout.setAttribute('data-closing', 'true');
+                setTimeout(handleTransitionEnd, 400); // fixed number
+            }
         }
     }, [isOpen])
 
     // useEffect for keyboardEvents
     useEffect(()=>{
-        const dialog = (flyoutRef.current as HTMLDialogElement);
+        const flyout = (flyoutRef.current as HTMLDialogElement);
         //Close dialog on escape, trap tab key
         function handleKeyDown(e:KeyboardEvent) { // role !== alertdialog
             if(e.key === 'Escape') closeFlyout();
@@ -76,14 +95,14 @@ function FlyoutDialog({customClass='', role='dialog', position='fixed', alignmen
         }
         //Close dialog on backdrop click
         function handlePointerDown(event:PointerEvent) {
-            if ( event.target === dialog ) closeFlyout();
+            if ( event.target === flyout ) closeFlyout();
         }
 
-        dialog.addEventListener('pointerdown', handlePointerDown)
+        flyout.addEventListener('pointerdown', handlePointerDown)
         window.addEventListener('keydown', handleKeyDown);
 
         return ()=>{
-            dialog.removeEventListener('pointerdown', handlePointerDown)
+            flyout.removeEventListener('pointerdown', handlePointerDown)
             window.removeEventListener('keydown', handleKeyDown);
         }
     }, [closeFlyout])

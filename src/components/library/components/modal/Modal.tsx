@@ -48,18 +48,34 @@ function ModalDialog({customClass='', role='dialog', position='fixed', hasBackdr
     const {modalId, isOpen, closeDialog} = modalContext;
 
     const dialogRef = useRef<HTMLDialogElement>(null);
+    const handleTransitionEnd = () => {
+        const dialog = (dialogRef.current as HTMLDialogElement);
+        dialog.removeAttribute('data-closing');
+        dialog.close();
+        document.body.style.removeProperty('overflow');
+    };
 
     //dialog ui methods - start
     //useeffect for open/close
     useEffect(()=>{
+        const dialog = (dialogRef.current as HTMLDialogElement);
+
         if(isOpen) {
-            dialogRef.current?.showModal();
+            dialog.showModal();
             document.body.style.setProperty('overflow', 'hidden');
             setFocusToFirstItem(dialogRef.current as HTMLElement);
         }
-        else {
-            dialogRef.current?.close();
-            document.body.style.removeProperty('overflow');
+        else if (!isOpen && dialog.open) {
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            //option - 1
+            if( ! prefersReducedMotion) { //option - 1
+                dialog.addEventListener('transitionend', handleTransitionEnd, { once: true });
+                dialog.setAttribute('data-closing', 'true');
+            }
+            else { // option - 2
+                dialog.setAttribute('data-closing', 'true');
+                setTimeout(handleTransitionEnd, 400); // fixed number
+            }
         }
     }, [isOpen])
 
