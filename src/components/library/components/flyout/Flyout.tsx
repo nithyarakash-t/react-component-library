@@ -98,14 +98,16 @@ function FlyoutDialog({customClass='', role='dialog', position='fixed', alignmen
             if ( event.target === flyout ) closeFlyout();
         }
 
-        flyout.addEventListener('pointerdown', handlePointerDown)
-        window.addEventListener('keydown', handleKeyDown);
+        if(isOpen) {
+            flyout.addEventListener('pointerdown', handlePointerDown);
+            window.addEventListener('keydown', handleKeyDown);
+        }
 
         return ()=>{
             flyout.removeEventListener('pointerdown', handlePointerDown)
             window.removeEventListener('keydown', handleKeyDown);
         }
-    }, [closeFlyout])
+    }, [isOpen, closeFlyout])
         //dialog ui methods - end
 
     return (

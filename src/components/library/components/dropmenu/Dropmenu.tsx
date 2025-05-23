@@ -347,30 +347,22 @@ function DropmenuOption({children}:DropmenuOptionProps) {
     }
 
     // 2 - 
-    const {registerOption, closeDropmenu} = CONTEXT; //, unregisterOption
+    const {registerOption, closeDropmenu, unregisterOption} = CONTEXT; //, unregisterOption
 
     // Register / Unregister
     const elementRef = useRef<HTMLElement | null>(null); // If we directly use optionRef.current in cleanup - The ref value 'optionRef.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'optionRef.current' to a variable inside the effect, and use that variable in the cleanup function
-    const unmountingRef = useRef(false);
 
-    const setOptionRef = useCallback((el: HTMLElement | null) => {
+    const setOptionRef = (el: HTMLElement | null) => {
         elementRef.current = el;
         if (el) registerOption(el);
-    }, [registerOption]);
-    // Set flag on true unmount
+    }
     useEffect(() => {
         return () => {
-            unmountingRef.current = true;
+            if (elementRef.current) {
+                unregisterOption(elementRef.current);
+            }
         };
-    }, []);
-    // Only unregister if truly unmounting
-    // useEffect(() => {
-    //     return () => {
-    //         if (unmountingRef.current && elementRef.current) {
-    //             unregisterOption(elementRef.current);
-    //         }
-    //     };
-    // }, [unregisterOption]);
+    }, [unregisterOption]);
 
     // 3 - Event handler
     function handleOptionClick(event:React.MouseEvent) {

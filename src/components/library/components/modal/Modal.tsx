@@ -94,14 +94,16 @@ function ModalDialog({customClass='', role='dialog', position='fixed', hasBackdr
             if ( event.target === dialog ) closeDialog();
         }
 
-        dialog.addEventListener('pointerdown', handlePointerDown)
-        window.addEventListener('keydown', handleKeyDown);
+        if(isOpen) {
+            dialog.addEventListener('pointerdown', handlePointerDown)
+            window.addEventListener('keydown', handleKeyDown);
+        }
 
         return ()=>{
             dialog.removeEventListener('pointerdown', handlePointerDown)
             window.removeEventListener('keydown', handleKeyDown);
         }
-    }, [closeDialog])
+    }, [isOpen, closeDialog])
     //dialog ui methods - end
 
     return (
