@@ -7,6 +7,7 @@ TODO - Theme switch - proper
        - Context Theme
        - https://storybook.js.org/addons/storybook-addon-themes
        - https://storybook.js.org/addons/@storybook/addon-themes
+TODO - After converting to compound components - we're not even seeing subcomponent props
 
 TODO - [ DOCUMENTATION FOR EVERYTHING ]
 TODO - Storybook UI configuration - refer to nerdy.dev and other such books
@@ -21,15 +22,27 @@ COMPLETED
 -----
 Accordion
 Modal
-       - in and out animation - esp. closeOut animation (w/o dom manipulation)
-       - remove backdrop - handle on dialog
-       - trap tab key
-       - set focus in / out
+       - [COMPLETED] - in and out animation - esp. closeOut animation (w/o dom manipulation)
+       - [COMPLETED] - [UNDER REVIEW] - remove backdrop - handle on dialog
+       - [COMPLETED] - trap tab key
+       - [COMPLETED] - set focus in / out
+       - right click closes flyout
+       - Tab tab key custom hook ?
+       - conditional rendering
 Flyout
-       - in and out animation - esp. closeOut animation (w/o dom manipulation)
-       - remove backdrop - handle on dialog
-       - trap tab key
-       - set focus in / out
+       - [COMPLETED] - in and out animation - esp. closeOut animation (w/o dom manipulation)
+       - [COMPLETED] - [UNDER REVIEW] - remove backdrop - handle on dialog
+       - [COMPLETED] - trap tab key
+       - [COMPLETED] - set focus in / out
+       - right click closes flyout
+       - Tab tab key custom hook ?
+       - condittional rending
+
+Dropmenu
+       - UseCallback on register
+       - Custom hook for watch click outside
+       - Subcomponents not showing up in story
+       - Rename option to interactive element
 
 PENDING
 -----

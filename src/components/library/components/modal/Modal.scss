@@ -88,12 +88,21 @@
           transition: opacity var(--_transition-duration) allow-discrete ease;
         }
 
+        //OPEN
         &:where(&[open], &:open) {
           opacity: 1;
           &::backdrop {
             @starting-style {
               opacity: 0;
             }
+          }
+        }
+
+        // CLOSING - Exit animation
+        &[data-closing="true"] {
+           opacity: 0;
+          &::backdrop {
+            opacity: 0;
           }
         }
 

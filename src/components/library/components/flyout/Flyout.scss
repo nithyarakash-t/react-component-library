@@ -88,6 +88,14 @@
           }
         }
 
+        // CLOSING - Exit animation
+        &[data-closing="true"] {
+            opacity: 0;
+            .c-flyout__container {
+                translate: var(--_starting-style);
+            }
+        }
+
         // CLOSED 
 
         // &:not(&[open]),

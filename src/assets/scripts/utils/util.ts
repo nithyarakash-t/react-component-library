@@ -22,6 +22,7 @@ export const getFocusableChildren = (element:HTMLElement | Document = document) 
 
 export const trapTabKey = (node:HTMLElement, event:KeyboardEvent) => {
     const focusableChildren = getFocusableChildren(node);
+    // console.log(focusableChildren, node, event)
     const focusedItemIndex = focusableChildren.indexOf(document.activeElement as HTMLElement);
     
     // If the SHIFT key is being pressed while tabbing (moving backwards) and
@@ -34,7 +35,7 @@ export const trapTabKey = (node:HTMLElement, event:KeyboardEvent) => {
     // focused item is the last one, move the focus to the first focusable item
     // from the dialog element
     } else if ( (!event.shiftKey) && (focusedItemIndex === focusableChildren.length - 1)) {
-    focusableChildren[0].focus();
-    event.preventDefault();
+      focusableChildren[0].focus();
+      event.preventDefault();
     }
 }

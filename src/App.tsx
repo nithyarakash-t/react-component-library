@@ -6,6 +6,7 @@ import { Footer } from './components/layout/footer/Footer'
 import { ThemeProvider } from './components/layout/themeSwitch/ThemeProvider'
 import { Dropmenu } from './components/library/components/dropmenu/Dropmenu'
 import { Accordion, Collapse} from './components/library/components/accordion/Accordion'
+import { Accordion as AccordionAlt, Collapse as CollapseAlt, CollapseControl, CollapseContent } from './components/library/components/accordion/AccordionAlt'
 import { Modal} from './components/library/components/modal/Modal'
 import { Button } from './components/library/elements/button/Button'
 import { ModalContext } from './components/library/components/modal/ModalContext'
@@ -90,6 +91,55 @@ function App() {
                           </Collapse.Content>
                         </Collapse>
                       </Accordion>
+
+                      {/* registry pattern */}
+                      <AccordionAlt
+                        accordionId="nested-accordion-2"
+                        customClass="example-nested-accordion-alt"
+                      >
+                         <CollapseAlt
+                          collapseId="nested-acc-nchild-1"
+                          customClass="nested-acc-child-collapse"
+                        >
+                          <CollapseControl>
+                            Collapse 1
+                          </CollapseControl>
+                          <CollapseContent>
+                            <div
+                              style={{
+                                paddingLeft: '3rem'
+                              }}
+                            >
+                              <AccordionAlt accordionId="nested-accordion-1-1">
+                                <CollapseAlt
+                                  collapseId="nested-acc-nchild-1-1"
+                                  customClass="nested-acc-child-collapse-nested"
+                                  open
+                                >
+                                  <CollapseControl>
+                                    Collapse 1-1
+                                  </CollapseControl>
+                                  <CollapseContent>
+                                    Inner Child
+                                  </CollapseContent>
+                                </CollapseAlt>
+                              </AccordionAlt>
+                            </div>
+                          </CollapseContent>
+                        </CollapseAlt>
+                        <CollapseAlt
+                          collapseId="nested-acc-nchild-2"
+                          customClass="nested-acc-child-collapse"
+                          open
+                        >
+                          <CollapseControl>
+                            Collapse 2
+                          </CollapseControl>
+                          <CollapseContent>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+                          </CollapseContent>
+                        </CollapseAlt>
+                      </AccordionAlt>
                       
                       <Modal modalId="def-modal" >
                         <Modal.Control>

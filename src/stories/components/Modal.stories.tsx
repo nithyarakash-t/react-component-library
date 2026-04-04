@@ -5,7 +5,6 @@ import {
 } from '../../components/library/components/modal/Modal';
 import { ModalContext } from '../../components/library/components/modal/ModalContext';
 import { Button } from '../../components/library/elements/button/Button';
-
 interface ExtendedModalProps extends ModalProps {
   modalDialogProps?: {
     customClass?: string;
@@ -14,7 +13,6 @@ interface ExtendedModalProps extends ModalProps {
     hasBackdrop?: boolean;
   }
 }
-
 
 const meta: Meta<ExtendedModalProps> = {
   title: 'Components/Modal',
