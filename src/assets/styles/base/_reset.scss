@@ -33,6 +33,7 @@ html {
   font-size: 16px;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   hanging-punctuation: first last; /* Not supported in Chrome */
+  scrollbar-gutter: stable;
   text-size-adjust: none; /* Prevent font size inflation */
   // text-size-adjust: 100%;
 
@@ -46,6 +47,7 @@ body {
   line-height: 1.5;
   font-weight: 300; //400
   font-size: 0.875rem;
+  min-block-size: 100svh;
   border-color: var(--app-color-border-primary, #000);
   color: var(--app-color-text-primary, #000);
   background-color: var( --app-color-background-primary, #fff);
