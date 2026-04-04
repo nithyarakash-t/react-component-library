@@ -94,6 +94,7 @@ img {
 button,
 [role="button"] {
   cursor: pointer;
+  text-box-trim: trim-both;
   &:disabled,
   &[aria-disabled="true"] {
     filter: grayscale(1);
